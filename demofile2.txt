@@ -1,0 +1,24 @@
+Now the file has more content!stdouttotal 284
+total 284
+total 284
+total 284
+drwx------  14 root root   4096 Sep  8 23:00 .
+drwxr-xr-x  24 root root   4096 Sep  9 06:02 ..
+-rw-------   1 root root  16799 Sep  9 00:45 .bash_history
+-rw-r--r--   1 root root   3106 Apr  9  2018 .bashrc
+drwx------   3 root root   4096 Jul  5 22:23 .cache
+-rw-r--r--   1 root root      0 Jul  5 14:06 .cloud-locale-test.skip
+drwxr-xr-x   3 root root   4096 Aug 21 00:33 .composer
+drwxr-xr-x   4 root root   4096 Aug 25 17:57 .config
+drwx------   3 root root   4096 Jul  5 14:10 .gnupg
+drwxr-xr-x   3 root root   4096 Jul  5 22:23 .local
+-rw-------   1 root root 179386 Sep  8 23:00 .mysql_history
+drwxr-xr-x 131 root root   4096 Sep  7 00:17 .npm
+-rwxrwxrwx   1 root root    148 Aug 17  2015 .profile
+drwxr-xr-x   2 root root   4096 Aug 21 02:18 .rpmdb
+drwx------   2 root root   4096 Jul  5 22:03 .ssh
+drwxr-xr-x   2 root root   4096 Sep  2 00:44 .vim
+-rw-------   1 root root  18771 Sep  8 00:29 .viminfo
+drwxr-xr-x   2 root root   4096 Sep  2 18:36 ahmed
+drwxr-xr-x   2 root root   4096 Sep  2 14:42 hello
+drwxr-xr-x   2 root root   4096 Sep  2 18:56 hh
