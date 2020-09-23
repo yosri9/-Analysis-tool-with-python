@@ -1,41 +1,53 @@
 from api.authentication import *
+from os import path
 
-bugTypes=["Warning" ,"Error" ,"Fail" ,"Debug" ,"Information" , "Trace"]
+bugTypes = ["Warning", "Error", "Fail", "Debug", "Information", "Trace"]
 
 
-def fetchBugs():
-    username =""
-    password = ""
-    client = Authentication.login(username, password)
-    for bugType in bugTypes:
-        client.exec_command(bugExtractorCommand(bugType))
+class FetchBugs():
 
-    client.close()
+    def fetchBugs():
 
-    client = Authentication.login(username, password)
+        client = Authentication.login(ApiUtilities.username, ApiUtilities.password)
+        command = ""
+        for bugType in bugTypes:
+            command += bugExtractorCommand(bugType) + "; "
+        client.exec_command(command)
 
-    ssh_sftp = client.open_sftp()
-    for bugType in bugTypes:
-        print(ApiUtilities.PATH + bugType + ".txt", ApiUtilities.LOCAL_FOLDER_PATH + bugType + ".txt")
-        ssh_sftp.get(ApiUtilities.PATH + bugType + ".txt", ApiUtilities.LOCAL_FOLDER_PATH + bugType + ".txt")
-    ssh_sftp.close()
-    client.close()
 
+        print(command)
+
+        client.close()
+
+        client = Authentication.login(ApiUtilities.username, ApiUtilities.password)
+        ssh_sftp = client.open_sftp()
+        # Download bugs file
+        for bugType in bugTypes:
+            # download bugFile
+            ssh_sftp = client.open_sftp()
+            print(ApiUtilities.PATH + bugType + ".txt", ApiUtilities.LOCAL_FOLDER_PATH + '/' + bugType + ".txt")
+            ssh_sftp.get(ApiUtilities.PATH + bugType + ".txt", ApiUtilities.LOCAL_FOLDER_PATH + '/' + bugType + ".txt")
+            ssh_sftp.close()
+
+        client.exec_command("rm " + ApiUtilities.PATH + "Warning.txt " + ApiUtilities.PATH + "Error.txt " +
+                            ApiUtilities.PATH + "Fail.txt " + ApiUtilities.PATH + "Debug.txt " + ApiUtilities.PATH + "Information.txt "
+                            + ApiUtilities.PATH + "Trace.txt")
+
+        client.close()
 
 
 def bugFile(bugType):
-    file = open(ApiUtilities.LOCAL_FOLDER_PATH + bugType + ".txt", "r")
+    print('open')
+    file = open(ApiUtilities.LOCAL_FOLDER_PATH + '/' + bugType + ".txt", "r")
     return file
 
 
 def bugExtractorCommand(bugType):
-    command=""
-    if bugType == "Trace":
-        grep = ""
-        command = "  cut -d \" \" -f 2- " + ApiUtilities.PATH + ApiUtilities.LOG_FILE + " |sort | uniq -c | sort -nr" + grep + "> " + ApiUtilities.PATH + bugType + ".txt "
+    grep = ""
+    command = "  cut -d \" \" -f 2- " + ApiUtilities.LOG_FILE_PATH + " |sort | uniq -c | sort -nr" + grep + "> " + ApiUtilities.PATH + bugType + ".txt "
 
-    else:
+    if bugType != "Trace":
         grep = "| grep \'(" + bugType[0] + ")\'"
+        command = "  cut -d \" \" -f 2- " + ApiUtilities.LOG_FILE_PATH + " |sort | uniq -c | sort -nr" + grep + "> " + ApiUtilities.PATH + bugType + ".txt "
 
     return command
-

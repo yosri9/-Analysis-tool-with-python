@@ -7,7 +7,7 @@
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
-
+from PyQt5.uic.properties import QtGui
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
@@ -15,7 +15,8 @@ from PySide2.QtCore import SIGNAL, QObject
 
 
 import images
-from api.Bug import fetchBugs, bugFile
+from api import ApiUtilities
+from api.Bug import FetchBugs, bugFile
 
 from bug.bug import Bug
 
@@ -30,7 +31,7 @@ class Ui_analyze(object):
         analyze.setWindowIcon(icon)
         analyze.setStyleSheet(u"background-color: white;")
         self.centralwidget = QWidget(analyze)
-        self.centralwidget.setObjectName(u"centralwidget")
+        self.centralwidget.setObjectName(u"centralWidget")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -116,15 +117,15 @@ class Ui_analyze(object):
         self.formLayout = QFormLayout(self.layoutWidget)
         self.formLayout.setObjectName(u"formLayout")
         self.formLayout.setContentsMargins(0, 0, 0, 0)
-        self.select_file = QPushButton(self.layoutWidget)
-        self.select_file.setObjectName(u"select_file")
+        self.select_folder = QPushButton(self.layoutWidget)
+        self.select_folder.setObjectName(u"select_folder")
         font1 = QFont()
         font1.setFamily(u"Tahoma")
         font1.setBold(True)
         font1.setItalic(False)
         font1.setWeight(75)
-        self.select_file.setFont(font1)
-        self.select_file.setStyleSheet(u"QPushButton {\n"
+        self.select_folder.setFont(font1)
+        self.select_folder.setStyleSheet(u"QPushButton {\n"
                                        "    \n"
                                        "color:white;\n"
                                        "border-radius: 2px;\n"
@@ -154,26 +155,30 @@ class Ui_analyze(object):
                                        "}")
         icon1 = QIcon()
         icon1.addFile(u"images/add.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.select_file.setIcon(icon1)
-        self.select_file.setIconSize(QSize(16, 16))
+        self.select_folder.setIcon(icon1)
+        self.select_folder.setIconSize(QSize(16, 16))
+        self.folder_path= ""
+        self.select_folder.clicked.connect(self.getDirectory)
+        self.select_folder.clicked.connect( self.getDirectoryPath)
 
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.select_file)
 
-        self.lineEdit = QLineEdit(self.layoutWidget)
-        self.lineEdit.setObjectName(u"lineEdit")
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.select_folder)
+
+        self.folder_path_label = QLabel(self.layoutWidget)
+        self.folder_path_label.setObjectName(u"folder_path_label")
         sizePolicy4 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Preferred)
         sizePolicy4.setHorizontalStretch(0)
         sizePolicy4.setVerticalStretch(0)
-        sizePolicy4.setHeightForWidth(self.lineEdit.sizePolicy().hasHeightForWidth())
-        self.lineEdit.setSizePolicy(sizePolicy4)
+        sizePolicy4.setHeightForWidth(self.folder_path_label.sizePolicy().hasHeightForWidth())
+        self.folder_path_label.setSizePolicy(sizePolicy4)
         font2 = QFont()
         font2.setFamily(u"Tahoma")
         font2.setBold(False)
         font2.setItalic(False)
         font2.setWeight(50)
-        self.lineEdit.setFont(font2)
-        self.lineEdit.setStyleSheet(u"\n"
-                                    "QLineEdit\n"
+        self.folder_path_label.setFont(font2)
+        self.folder_path_label.setStyleSheet(u"\n"
+                                    "QLabel\n"
                                     "{\n"
                                     "    background-color: white;\n"
                                     "color:black;\n"
@@ -184,7 +189,7 @@ class Ui_analyze(object):
                                     "}\n"
                                     "")
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.lineEdit)
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.folder_path_label)
 
         self.layoutWidget1 = QWidget(self.frame)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
@@ -192,13 +197,14 @@ class Ui_analyze(object):
         self.horizontalLayout = QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.last_modif_date = QLabel(self.layoutWidget1)
-        self.last_modif_date.setObjectName(u"last_modif_date")
+        # server path
+        self.log_file_path_label = QLabel(self.layoutWidget1)
+        self.log_file_path_label.setObjectName(u"log_file_path_label")
         font3 = QFont()
         font3.setBold(True)
         font3.setWeight(75)
-        self.last_modif_date.setFont(font3)
-        self.last_modif_date.setStyleSheet(u"QLabel {\n"
+        self.log_file_path_label.setFont(font3)
+        self.log_file_path_label.setStyleSheet(u"QLabel {\n"
                                            "   \n"
                                            "\n"
                                            "color:white;\n"
@@ -209,12 +215,12 @@ class Ui_analyze(object):
                                            "\n"
                                            "}")
 
-        self.horizontalLayout.addWidget(self.last_modif_date)
+        self.horizontalLayout.addWidget(self.log_file_path_label)
 
-        self.lbl_last_modif_date = QLabel(self.layoutWidget1)
-        self.lbl_last_modif_date.setObjectName(u"lbl_last_modif_date")
-        self.lbl_last_modif_date.setFont(font3)
-        self.lbl_last_modif_date.setStyleSheet(u"QLabel {\n"
+        self.log_file_path_editLine = QLineEdit(self.layoutWidget1)
+        self.log_file_path_editLine.setObjectName(u"log_file_path_editLine")
+        self.log_file_path_editLine.setFont(font3)
+        self.log_file_path_editLine.setStyleSheet(u"QLineEdit {\n"
                                                "    border: 1px solid white;\n"
                                                "    border-radius: 1px;\n"
                                                "    background-color: white;\n"
@@ -222,42 +228,57 @@ class Ui_analyze(object):
                                                "	color: black;\n"
                                                "}")
 
-        self.horizontalLayout.addWidget(self.lbl_last_modif_date)
+        self.horizontalLayout.addWidget(self.log_file_path_editLine)
 
-        self.layoutWidget2 = QWidget(self.frame)
-        self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.layoutWidget2.setGeometry(QRect(0, 330, 331, 23))
-        self.horizontalLayout_2 = QHBoxLayout(self.layoutWidget2)
+        self.submit_folder_and_file = QPushButton(self.frame)
+        self.submit_folder_and_file.setObjectName(u"submit_folder_and_file")
+        submitFont = QFont()
+        submitFont.setPointSize(20)
+        submitFont.setBold(True)
+        submitFont.setLetterSpacing(QFont.PercentageSpacing,150)
+        submitFont.setWeight(75)
+        self.submit_folder_and_file.setFont(submitFont)
+        self.submit_folder_and_file.setText("SUBMIT")
+        self.submit_folder_and_file.setStyleSheet(
+            u"QPushButton {\n"
+            "    border: 2px solid #8f8f91;\n"
+            "    border-radius: 2px;\n"
+            "    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+            "                                      stop: 0 #f6f7fa, stop: 1 #dadbde);\n"
+            "    min-width: 80px;\n"
+            "}\n"
+            "\n"
+            "QPushButton:pressed {\n"
+            "    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+            "                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+            "}\n"
+            "\n"
+            "QPushButton:flat {\n"
+            "    border: none; /* no border for a flat push button */\n"
+            "}\n"
+            "\n"
+            "QPushButton:default {\n"
+            "    border-color: navy; /* make the default button prominent */\n"
+            "}\n"
+            "QPushButton:hover\n"
+            "{\n"
+            "color:white;\n"
+            "border-radius: 2px;\n"
+            "background:green;\n"
+            " border: 2px solid GREEN;\n"
+            " min-width: 80px;\n"
+            "}")
+
+
+        self.submit_folder_and_file.setGeometry(QRect(7,450, 320, 30))
+        self.submit_folder_and_file.clicked.connect(self.submit)
+
+
+
+        self.horizontalLayout_2 = QHBoxLayout(self.submit_folder_and_file)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.file_size = QLabel(self.layoutWidget2)
-        self.file_size.setObjectName(u"file_size")
-        self.file_size.setFont(font3)
-        self.file_size.setStyleSheet(u"QLabel {\n"
-                                     "   \n"
-                                     "\n"
-                                     "color:white;\n"
-                                     "border-radius: 1px;\n"
-                                     "background:rgb(0, 0, 0);\n"
-                                     "/* border: 2px solid #00007f;*/\n"
-                                     " min-width: 40px;\n"
-                                     "\n"
-                                     "}")
 
-        self.horizontalLayout_2.addWidget(self.file_size)
-
-        self.lbl_file_size = QLabel(self.layoutWidget2)
-        self.lbl_file_size.setObjectName(u"lbl_file_size")
-        self.lbl_file_size.setFont(font3)
-        self.lbl_file_size.setStyleSheet(u"QLabel {\n"
-                                         "    border: 1px solid white;\n"
-                                         "    border-radius: 1px;\n"
-                                         "    background-color: white;\n"
-                                         "    min-width: 40px;\n"
-                                         "	color: black;\n"
-                                         "}")
-
-        self.horizontalLayout_2.addWidget(self.lbl_file_size)
 
         self.gridLayout_2.addWidget(self.frame, 0, 0, 1, 1)
         #end of  column 1
@@ -367,7 +388,6 @@ class Ui_analyze(object):
                                         "QTreeView::item:selected:!active {\n"
                                         "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                         "}")
-        self.addBugItems(self.warning_page, "Warning")
         self.gridLayout.addWidget(self.warning_page, 0, 0, 1, 1)
 
         icon2 = QIcon()
@@ -415,7 +435,6 @@ class Ui_analyze(object):
                                      "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                      "}")
 
-        self.addBugItems(self.fail_page, "Fail")
 
 
         self.gridLayout_12.addWidget(self.fail_page, 0, 0, 1, 1)
@@ -461,7 +480,6 @@ class Ui_analyze(object):
                                       "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                       "}")
 
-        self.addBugItems(self.error_page, "Error")
 
         self.gridLayout_error.addWidget(self.error_page, 0, 0, 1, 1)
 
@@ -509,7 +527,6 @@ class Ui_analyze(object):
                                             "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                             "}")
 
-        self.addBugItems(self.information_page, "Information")
 
         self.gridLayout_information.addWidget(self.information_page, 0, 0, 1, 1)
 
@@ -554,7 +571,6 @@ class Ui_analyze(object):
                                       "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                       "}")
 
-        self.addBugItems(self.debug_page, "Debug")
 
         self.gridLayout_debug.addWidget(self.debug_page, 0, 0, 1, 1)
 
@@ -602,7 +618,6 @@ class Ui_analyze(object):
             # print(line)
 
         #   TODO:call to function addBugItems after tabBar selection
-        QObject.connect(self.trace_tab , SIGNAL('clicked()'),self.addBugItems(self.trace_page, "Trace") )
 
 
         self.gridLayout_11.addWidget(self.trace_page, 0, 0, 1, 1)
@@ -957,15 +972,15 @@ class Ui_analyze(object):
     def retranslateUi(self, analyze):
         analyze.setWindowTitle(QCoreApplication.translate("analyze", u"Results", None))
         self.label_4.setText("")
-        self.label_6.setText(QCoreApplication.translate("analyze", u"  Enter your log file here", None))
+        self.label_6.setText(QCoreApplication.translate("analyze", u"  Submit Form", None))
         self.label_5.setText("")
-        self.select_file.setText(QCoreApplication.translate("analyze", u"Select File", None))
+        self.select_folder.setText(QCoreApplication.translate("analyze", u"Select Folder", None))
         # TODO: remplir les contenus
-        self.lineEdit.setText("")
-        self.last_modif_date.setText(QCoreApplication.translate("analyze", u"Creation date", None))
-        self.lbl_last_modif_date.setText("")
-        self.file_size.setText(QCoreApplication.translate("analyze", u"File size", None))
-        self.lbl_file_size.setText("")
+        self.folder_path_label.setText("")
+        self.log_file_path_label.setText(QCoreApplication.translate("analyze", u"file path", None))
+        self.log_file_path_editLine.setText("")
+        self.log_file_path_editLine.setPlaceholderText("Enter the file path on the server")
+
         # if QT_CONFIG(tooltip)
         self.tabWidget.setToolTip(
             QCoreApplication.translate("analyze", u"<html><head/><body><p><br/></p></body></html>", None))
@@ -1044,18 +1059,47 @@ class Ui_analyze(object):
     # retranslateUi
 
     def addBugItems(self, bugPage, bugType):
-        print(  bugType)
         file = bugFile( bugType )
-        print()
         for line in file.readlines():
             while (line.startswith(" ")):
                 line = line[1::]
 
             line = line.split(" ", 2)
-            print(line)
-            bug = QTreeWidgetItem(line)
             bug = QTreeWidgetItem(line)
             bugPage.addTopLevelItem(bug)
+
+    @Slot()
+    def getDirectory(self):
+        dialog = QFileDialog
+        self.folder_path = dialog.getExistingDirectory(None, "Select Folder To Store Files")
+
+    @Slot()
+    def getDirectoryPath(self):
+        self.folder_path_label.setText(self.folder_path)
+        return self.folder_path
+
+    @Slot()
+    def submit(self):
+        ApiUtilities.LOCAL_FOLDER_PATH=self.folder_path_label.text()
+        ApiUtilities.LOG_FILE_PATH= self.log_file_path_editLine.text()
+        logFilePathList= self.log_file_path_editLine.text().split("/")
+        ApiUtilities.PATH=""
+
+        for i in range(len(logFilePathList)-1):
+            ApiUtilities.PATH += logFilePathList[i] + '/'
+
+
+        FetchBugs.fetchBugs()
+        self.addBugItems(self.warning_page, "Warning")
+        self.addBugItems(self.fail_page, "Fail")
+        self.addBugItems(self.error_page, "Error")
+        self.addBugItems(self.information_page, "Information")
+        self.addBugItems(self.debug_page, "Debug")
+        self.addBugItems(self.trace_page, "Trace")
+
+
+
+
 
 
 
