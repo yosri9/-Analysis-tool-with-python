@@ -3,5 +3,5 @@ class ApiUtilities():
     PATH = ""
     LOCAL_FOLDER_PATH = ""
     LOG_FILE_PATH= ""
-    username = ""
-    password = ""
+    USERNAME = ""
+    PASSWORD = ""

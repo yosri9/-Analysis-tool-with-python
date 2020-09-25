@@ -8,7 +8,7 @@ class FetchBugs():
 
     def fetchBugs():
 
-        client = Authentication.login(ApiUtilities.username, ApiUtilities.password)
+        client = Authentication.login()
         command = ""
         for bugType in bugTypes:
             command += bugExtractorCommand(bugType) + "; "
@@ -19,7 +19,7 @@ class FetchBugs():
 
         client.close()
 
-        client = Authentication.login(ApiUtilities.username, ApiUtilities.password)
+        client = Authentication.login()
         ssh_sftp = client.open_sftp()
         # Download bugs file
         for bugType in bugTypes:
