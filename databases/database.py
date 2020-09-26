@@ -62,7 +62,7 @@ class Database():
         conn.commit()
         db.close()
         conn.close()
-    def getAll(  model=Exchange() ):
+    def getAll(  model ):
         conn = sqlite3.connect("analysis-tool.db")
         db = conn.cursor()
         sql_get_all_rows ="SELECT * FROM " +model.table()
@@ -73,5 +73,7 @@ class Database():
         conn.close()
 
         return rows
+
+
 
 

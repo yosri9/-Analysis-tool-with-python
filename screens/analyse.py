@@ -13,7 +13,6 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 from PySide2.QtCore import SIGNAL, QObject
 
-
 import images
 from api import ApiUtilities
 from api.Bug import FetchBugs, bugFile
@@ -126,41 +125,40 @@ class Ui_analyze(object):
         font1.setWeight(75)
         self.select_folder.setFont(font1)
         self.select_folder.setStyleSheet(u"QPushButton {\n"
-                                       "    \n"
-                                       "color:white;\n"
-                                       "border-radius: 2px;\n"
-                                       "background:rgb(0, 0, 0);\n"
-                                       "/* border: 2px solid #00007f;*/\n"
-                                       " min-width: 40px;\n"
-                                       "}\n"
-                                       "\n"
-                                       "QPushButton:pressed {\n"
-                                       "    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-                                       "                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
-                                       "}\n"
-                                       "\n"
-                                       "QPushButton:flat {\n"
-                                       "    border: none; /* no border for a flat push button */\n"
-                                       "}\n"
-                                       "\n"
-                                       "QPushButton:default {\n"
-                                       "    border-color: navy; /* make the default button prominent */\n"
-                                       "}\n"
-                                       "QPushButton:hover\n"
-                                       "{\n"
-                                       "border: 2px solid rgb(66, 199, 0);\n"
-                                       "    border-radius: 2px;\n"
-                                       "    background-color:  black;\n"
-                                       "    min-width: 40px;\n"
-                                       "}")
+                                         "    \n"
+                                         "color:white;\n"
+                                         "border-radius: 2px;\n"
+                                         "background:rgb(0, 0, 0);\n"
+                                         "/* border: 2px solid #00007f;*/\n"
+                                         " min-width: 40px;\n"
+                                         "}\n"
+                                         "\n"
+                                         "QPushButton:pressed {\n"
+                                         "    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+                                         "                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+                                         "}\n"
+                                         "\n"
+                                         "QPushButton:flat {\n"
+                                         "    border: none; /* no border for a flat push button */\n"
+                                         "}\n"
+                                         "\n"
+                                         "QPushButton:default {\n"
+                                         "    border-color: navy; /* make the default button prominent */\n"
+                                         "}\n"
+                                         "QPushButton:hover\n"
+                                         "{\n"
+                                         "border: 2px solid rgb(66, 199, 0);\n"
+                                         "    border-radius: 2px;\n"
+                                         "    background-color:  black;\n"
+                                         "    min-width: 40px;\n"
+                                         "}")
         icon1 = QIcon()
         icon1.addFile(u"images/add.png", QSize(), QIcon.Normal, QIcon.Off)
         self.select_folder.setIcon(icon1)
         self.select_folder.setIconSize(QSize(16, 16))
-        self.folder_path= ""
+        self.folder_path = ""
         self.select_folder.clicked.connect(self.getDirectory)
-        self.select_folder.clicked.connect( self.getDirectoryPath)
-
+        self.select_folder.clicked.connect(self.getDirectoryPath)
 
         self.formLayout.setWidget(0, QFormLayout.LabelRole, self.select_folder)
 
@@ -178,16 +176,16 @@ class Ui_analyze(object):
         font2.setWeight(50)
         self.folder_path_label.setFont(font2)
         self.folder_path_label.setStyleSheet(u"\n"
-                                    "QLabel\n"
-                                    "{\n"
-                                    "    background-color: white;\n"
-                                    "color:black;\n"
-                                    "border-bottom:1px solid #717072;\n"
-                                    "border-radius:1px;\n"
-                                    "border:none;\n"
-                                    " min-width: 40px;\n"
-                                    "}\n"
-                                    "")
+                                             "QLabel\n"
+                                             "{\n"
+                                             "    background-color: white;\n"
+                                             "color:black;\n"
+                                             "border-bottom:1px solid #717072;\n"
+                                             "border-radius:1px;\n"
+                                             "border:none;\n"
+                                             " min-width: 40px;\n"
+                                             "}\n"
+                                             "")
 
         self.formLayout.setWidget(0, QFormLayout.FieldRole, self.folder_path_label)
 
@@ -205,15 +203,15 @@ class Ui_analyze(object):
         font3.setWeight(75)
         self.log_file_path_label.setFont(font3)
         self.log_file_path_label.setStyleSheet(u"QLabel {\n"
-                                           "   \n"
-                                           "\n"
-                                           "color:white;\n"
-                                           "border-radius: 1px;\n"
-                                           "background:rgb(0, 0, 0);\n"
-                                           "/* border: 2px solid #00007f;*/\n"
-                                           " min-width: 40px;\n"
-                                           "\n"
-                                           "}")
+                                               "   \n"
+                                               "\n"
+                                               "color:white;\n"
+                                               "border-radius: 1px;\n"
+                                               "background:rgb(0, 0, 0);\n"
+                                               "/* border: 2px solid #00007f;*/\n"
+                                               " min-width: 40px;\n"
+                                               "\n"
+                                               "}")
 
         self.horizontalLayout.addWidget(self.log_file_path_label)
 
@@ -221,12 +219,12 @@ class Ui_analyze(object):
         self.log_file_path_editLine.setObjectName(u"log_file_path_editLine")
         self.log_file_path_editLine.setFont(font3)
         self.log_file_path_editLine.setStyleSheet(u"QLineEdit {\n"
-                                               "    border: 1px solid white;\n"
-                                               "    border-radius: 1px;\n"
-                                               "    background-color: white;\n"
-                                               "    min-width: 40px;\n"
-                                               "	color: black;\n"
-                                               "}")
+                                                  "    border: 1px solid white;\n"
+                                                  "    border-radius: 1px;\n"
+                                                  "    background-color: white;\n"
+                                                  "    min-width: 40px;\n"
+                                                  "	color: black;\n"
+                                                  "}")
 
         self.horizontalLayout.addWidget(self.log_file_path_editLine)
 
@@ -235,7 +233,7 @@ class Ui_analyze(object):
         submitFont = QFont()
         submitFont.setPointSize(20)
         submitFont.setBold(True)
-        submitFont.setLetterSpacing(QFont.PercentageSpacing,150)
+        submitFont.setLetterSpacing(QFont.PercentageSpacing, 150)
         submitFont.setWeight(75)
         self.submit_folder_and_file.setFont(submitFont)
         self.submit_folder_and_file.setText("SUBMIT")
@@ -269,19 +267,15 @@ class Ui_analyze(object):
             " min-width: 80px;\n"
             "}")
 
-
-        self.submit_folder_and_file.setGeometry(QRect(7,450, 320, 30))
+        self.submit_folder_and_file.setGeometry(QRect(7, 450, 320, 30))
         self.submit_folder_and_file.clicked.connect(self.submit)
-
-
 
         self.horizontalLayout_2 = QHBoxLayout(self.submit_folder_and_file)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
 
-
         self.gridLayout_2.addWidget(self.frame, 0, 0, 1, 1)
-        #end of  column 1
+        # end of  column 1
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setSpacing(0)
@@ -435,8 +429,6 @@ class Ui_analyze(object):
                                      "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                      "}")
 
-
-
         self.gridLayout_12.addWidget(self.fail_page, 0, 0, 1, 1)
 
         icon3 = QIcon()
@@ -479,7 +471,6 @@ class Ui_analyze(object):
                                       "QTreeView::item:selected:!active {\n"
                                       "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                       "}")
-
 
         self.gridLayout_error.addWidget(self.error_page, 0, 0, 1, 1)
 
@@ -527,7 +518,6 @@ class Ui_analyze(object):
                                             "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                             "}")
 
-
         self.gridLayout_information.addWidget(self.information_page, 0, 0, 1, 1)
 
         icon5 = QIcon()
@@ -570,7 +560,6 @@ class Ui_analyze(object):
                                       "QTreeView::item:selected:!active {\n"
                                       "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                       "}")
-
 
         self.gridLayout_debug.addWidget(self.debug_page, 0, 0, 1, 1)
 
@@ -615,10 +604,9 @@ class Ui_analyze(object):
                                       "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                       "}")
 
-            # print(line)
+        # print(line)
 
         #   TODO:call to function addBugItems after tabBar selection
-
 
         self.gridLayout_11.addWidget(self.trace_page, 0, 0, 1, 1)
 
@@ -660,6 +648,8 @@ class Ui_analyze(object):
         icon8.addFile(u"images/arrow_down.png", QSize(), QIcon.Normal, QIcon.Off)
         self.ignoreButton.setIcon(icon8)
         self.ignoreButton.setIconSize(QSize(32, 32))
+
+        self.ignoreButton.clicked.connect(self.addIgnoredItem)
 
         self.verticalLayout.addWidget(self.ignoreButton)
 
@@ -832,7 +822,7 @@ class Ui_analyze(object):
         font7.setPointSize(8)
         __qtreewidgetitem3 = QTreeWidgetItem()
         __qtreewidgetitem3.setFont(2, font7);
-        __qtreewidgetitem3.setText(0, u"number of occurrences");
+        __qtreewidgetitem3.setText(0, u"number of occurrences")
         self.unwanted_log_info.setHeaderItem(__qtreewidgetitem3)
         self.unwanted_log_info.setObjectName(u"unwanted_log_info")
         self.unwanted_log_info.setStyleSheet(u"QTreeView {\n"
@@ -865,7 +855,6 @@ class Ui_analyze(object):
                                              "QTreeView::item:selected:!active {\n"
                                              "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                              "}")
-
         self.verticalLayout_3.addWidget(self.unwanted_log_info)
 
         self.verticalSpacer_3 = QSpacerItem(20, 18, QSizePolicy.Minimum, QSizePolicy.Fixed)
@@ -963,7 +952,7 @@ class Ui_analyze(object):
 
         self.retranslateUi(analyze)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
 
         QMetaObject.connectSlotsByName(analyze)
 
@@ -1022,7 +1011,7 @@ class Ui_analyze(object):
         ___qtreewidgetitem5.setText(0, QCoreApplication.translate("analyze", u"number of occurrences", None));
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.trace_tab),
                                   QCoreApplication.translate("analyze", u"TRACE", None))
-        self.tabWidget.activateWindow()
+        # self.tabWidget.activateWindow()
         # if QT_CONFIG(tooltip)
         self.ignoreButton.setToolTip(QCoreApplication.translate("analyze",
                                                                 u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Clic here to save the selected error in the database and delete it from the log file </span></p></body></html>",
@@ -1056,10 +1045,11 @@ class Ui_analyze(object):
         ___qtreewidgetitem6.setText(2, QCoreApplication.translate("analyze", u"Message", None));
         ___qtreewidgetitem6.setText(1, QCoreApplication.translate("analyze", u"Level", None));
         self.quit_button.setText(QCoreApplication.translate("analyze", u"Quit", None))
+
     # retranslateUi
 
     def addBugItems(self, bugPage, bugType):
-        file = bugFile( bugType )
+        file = bugFile(bugType)
         for line in file.readlines():
             while (line.startswith(" ")):
                 line = line[1::]
@@ -1080,14 +1070,13 @@ class Ui_analyze(object):
 
     @Slot()
     def submit(self):
-        ApiUtilities.LOCAL_FOLDER_PATH=self.folder_path_label.text()
-        ApiUtilities.LOG_FILE_PATH= self.log_file_path_editLine.text()
-        logFilePathList= self.log_file_path_editLine.text().split("/")
-        ApiUtilities.PATH=""
+        ApiUtilities.LOCAL_FOLDER_PATH = self.folder_path_label.text()
+        ApiUtilities.LOG_FILE_PATH = self.log_file_path_editLine.text()
+        logFilePathList = self.log_file_path_editLine.text().split("/")
+        ApiUtilities.PATH = ""
 
-        for i in range(len(logFilePathList)-1):
+        for i in range(len(logFilePathList) - 1):
             ApiUtilities.PATH += logFilePathList[i] + '/'
-
 
         FetchBugs.fetchBugs()
         self.addBugItems(self.warning_page, "Warning")
@@ -1097,12 +1086,67 @@ class Ui_analyze(object):
         self.addBugItems(self.debug_page, "Debug")
         self.addBugItems(self.trace_page, "Trace")
 
+    @Slot()
+    def addIgnoredItem(self):
+        if self.tabWidget.currentIndex() == 0:
+            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.warning_page))
+        elif self.tabWidget.currentIndex() == 1:
+            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.fail_page))
+        elif self.tabWidget.currentIndex() == 2:
+            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.error_page))
+        elif self.tabWidget.currentIndex() == 3:
+            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.information_page))
+        elif self.tabWidget.currentIndex() == 4:
+            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.debug_page))
+        else:
+            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.trace_page))
 
 
+    def addIgnoredPageItem(self,bugPage):
+        selectedError = []
+        for i in range(3):
+            selectedError.append(bugPage.currentItem().data(i, 2))
+            print(bugPage.currentItem().data(i, 2))
+        print(selectedError)
+        print(bugPage.currentItem().data(2, 2))
 
+        selectedError = QTreeWidgetItem(selectedError)
+        bugPage.currentItem().setHidden(True)
+        items = self.trace_page.findItems( bugPage.currentItem().data(2,2) ,Qt.MatchFixedString | Qt.MatchRecursive , 2 )
+        for item in items:
+            if self.tabWidget.currentIndex() == 0 and item.text(1) == "(W)" :
+                self.trace_page.setCurrentItem(item)
+                self.trace_page.currentItem().setHidden(True)
+            elif self.tabWidget.currentIndex() == 1 and item.text(1) == "(F)" :
+                self.trace_page.setCurrentItem(item)
+                self.trace_page.currentItem().setHidden(True)
+            elif self.tabWidget.currentIndex() == 2 and item.text(1) == "(E)":
+                self.trace_page.setCurrentItem(item)
+                self.trace_page.currentItem().setHidden(True)
+            elif self.tabWidget.currentIndex() == 3 and item.text(1) == "(I)":
+                self.trace_page.setCurrentItem(item)
+                self.trace_page.currentItem().setHidden(True)
+            elif self.tabWidget.currentIndex() == 4 and item.text(1) == "(D)":
+                self.trace_page.setCurrentItem(item)
+                self.trace_page.currentItem().setHidden(True)
+            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(W)":
+                self.warning_page.setCurrentItem(item)
+                self.warning_page.currentItem().setHidden(True)
+            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(F)":
+                self.fail_page.setCurrentItem(item)
+                self.fail_page.currentItem().setHidden(True)
+            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(E)":
+                self.error_page.setCurrentItem(item)
+                self.error_page.currentItem().setHidden(True)
+            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(I)":
+                self.information_page.setCurrentItem(item)
+                self.information_page.currentItem().setHidden(True)
+            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(D)":
+                self.error_page.setCurrentItem(item)
+                self.error_page.currentItem().setHidden(True)
 
-
-
+            print(item.text(0))
+        return selectedError
 
 # Error: analyze.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget1'.
 #
