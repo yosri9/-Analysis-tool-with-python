@@ -835,12 +835,12 @@ class Ui_boursewindoww(object):
     @Slot()
     def goToAnalysisWindow(self):
         selectedItem = self.listbourse.currentItem()
-        selectedItemID=None
         selectedItemData = None
 
         for id , name in self.IDNameMap.items():
             if( name == str(selectedItem.text() )):
                 selectedItemID = id
+                ApiUtilities.EXCHANGE_ID = id
 
 
 

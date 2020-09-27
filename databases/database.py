@@ -24,15 +24,30 @@ class Database():
                                                             description text NOT NULL
 
                                                         );"""
+        sql_create_bug_exchanges_table = """CREATE TABLE IF NOT EXISTS bug_exchanges (
+                                                            bug_id integer NOT NULL,
+                                                            exchange_id integer NOT NULL,
+                                                            FOREIGN KEY (bug_id) REFERENCES  bugs(id), 
+                                                            FOREIGN KEY (exchange_id) REFERENCES  exchanges(id),
+                                                            UNIQUE (bug_id, exchange_id)
+
+                                                        );"""
+
         c.execute(sql_create_bugs_table)
         c.execute(sql_create_exchanges_table)
+        c.execute(sql_create_bug_exchanges_table)
 
 
     def insert( model ):
-        sql_insert_element = "INSERT INTO " + model.table() + " VALUES  (NULL"
-        for i in range(1, len(model.toMap())):
-            print (model.toMap())
-            sql_insert_element = sql_insert_element + ",\"" + model.toMap()[i]+ "\""
+        print(model.toList())
+        if model.table() != "bug_exchanges":
+            sql_insert_element = "INSERT INTO " + model.table() + " VALUES  (NULL"
+            for i in range(1, len(model.toList())):
+                sql_insert_element = sql_insert_element + ",\"" + str(model.toList()[i]) + "\""
+        else:
+            sql_insert_element = "INSERT INTO " + model.table() + " VALUES  ("
+
+            sql_insert_element = sql_insert_element +   str(model.toList()[0]) + " ," +str(model.toList()[1])
         sql_insert_element = sql_insert_element + ")"
 
         conn = sqlite3.connect("analysis-tool.db")

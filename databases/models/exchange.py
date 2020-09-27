@@ -8,10 +8,9 @@ class Exchange():
         self.userName = userName
         self.password = password
 
-    def table(self):
-        return 'exchanges'
 
-    def toMap(self):
+
+    def toList(self):
         return (
             self.id ,
             self.exchangeName,

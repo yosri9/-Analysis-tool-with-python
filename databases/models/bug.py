@@ -1,16 +1,14 @@
 
 
 class Bug():
-    def __init__(self, id, repetition, level, description):
+    def __init__(self, id = None, repetition = None, level = None, description = None):
         self.id = id
         self.repetition = repetition
         self.level = level
         self.description = description
 
-    def table():
-        return 'bugs'
 
-    def toMap(self):
+    def toList(self):
         return (
              self.id,
              self.repetition,
@@ -23,7 +21,7 @@ class Bug():
         self.repetition = map[1],
         self.level = map[2],
         self.description = map[3]
-
+    @classmethod
     def table(self):
         return 'bugs'
 
