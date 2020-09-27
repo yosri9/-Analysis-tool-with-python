@@ -1,5 +1,6 @@
 import sqlite3
 
+from api import ApiUtilities
 from databases.models import Exchange
 
 
@@ -68,12 +69,21 @@ class Database():
         sql_update_row = "UPDATE" + model.table()  +"SET+" + model.toMap().items + "WHERE id = " + model.getID
         db.execute( sql_update_row , model.toMap().items() )
 
-    def delete( model):
+    def bugExchangedelete( model):
         conn = sqlite3.connect("analysis-tool.db")
         db = conn.cursor()
-        sql_delete_row = "DELETE FROM "+ model.table() + " WHERE id = " + str(model.getID())
+        sql_delete_row = "DELETE FROM "+ model.table() + " WHERE( bug_id = " + str(model.getBugID()) + " and exchange_id = "+ str(model.getExchangeID()) +")"
         print(sql_delete_row)
         db.execute(sql_delete_row )
+        conn.commit()
+        db.close()
+        conn.close()
+    def delete(model):
+        conn = sqlite3.connect("analysis-tool.db")
+        db = conn.cursor()
+        sql_delete_row = "DELETE FROM " + model.table() + " WHERE( id = " +str(model.getID()) +" )"
+        print(sql_delete_row)
+        db.execute(sql_delete_row)
         conn.commit()
         db.close()
         conn.close()
@@ -88,6 +98,17 @@ class Database():
         conn.close()
 
         return rows
+    def getBug(model):
+        conn = sqlite3.connect("analysis-tool.db")
+        db = conn.cursor()
+        sql_get_row = "SELECT * FROM " + model.table() + " WHERE ( level = \"" + model.getLevel() + "\" and description = \""+ model.getDescription() + "\")"
+        print(sql_get_row)
+        db.execute(sql_get_row)
+        row = db.fetchone()
+        db.close()
+        conn.close()
+        return row
+
 
     def getAll(  model ):
         conn = sqlite3.connect("analysis-tool.db")
@@ -111,6 +132,17 @@ class Database():
         conn.close()
 
         return rows
+    def exist(  model ):
+        conn = sqlite3.connect("analysis-tool.db")
+        db = conn.cursor()
+        sql_bug_existance =" SELECT EXISTS(SELECT * from bug_exchanges WHERE bug_id= " + str(model.getID()) +"); "
+        print(sql_bug_existance)
+        db.execute(sql_bug_existance )
+        exist = db.fetchone()
+        db.close()
+        conn.close()
+
+        return exist
 
 
 

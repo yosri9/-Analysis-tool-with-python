@@ -27,3 +27,9 @@ class Bug():
 
     def getID(self):
         return self.id
+    def setId(self , id):
+        self.id = id
+    def getLevel(self):
+        return self.level
+    def getDescription(self):
+        return self.description

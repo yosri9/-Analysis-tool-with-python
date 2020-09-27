@@ -776,6 +776,7 @@ class Ui_analyze(object):
         self.restoreButton.setIcon(icon10)
         self.restoreButton.setIconSize(QSize(32, 32))
 
+        self.restoreButton.clicked.connect(self.restoreBug)
         self.verticalLayout_2.addWidget(self.restoreButton)
 
         self.restoreLabel = QLabel(self.centralwidget)
@@ -866,8 +867,11 @@ class Ui_analyze(object):
         print(unwantedDataID)
         print("unwantedDataID")
         self.bugData=[]
+        self.bugExchangeID = []
+
         for data in unwantedDataID:
             bugExchangeElement = BugExchange(data[0] , data[1])
+            self.bugExchangeID.append(bugExchangeElement)
             item=list(Database.getByID(Bug , bugExchangeElement.getBugID()))
             item.pop(0)
             self.bugData.append(item )
@@ -1280,6 +1284,53 @@ class Ui_analyze(object):
 
 
         return selectedBugItem , itemIndex ,selectedBug
+    @Slot()
+    def restoreBug(self):
+        selectedItemToRestore = self.unwanted_log_info.currentItem()
+        if selectedItemToRestore.data(1,2) == "(W)" :
+            self.restoreBugProcess(self.warning_page , selectedItemToRestore)
+
+        elif selectedItemToRestore.data(1,2) == "(F)" :
+            self.restoreBugProcess(self.fail_page , selectedItemToRestore)
+
+
+        elif selectedItemToRestore.data(1, 2) == "(E)":
+            self.restoreBugProcess(self.error_page , selectedItemToRestore)
+
+
+        elif selectedItemToRestore.data(1, 2) == "(D)":
+            self.restoreBugProcess(self.debug_page , selectedItemToRestore)
+
+
+        elif selectedItemToRestore.data(1, 2) == "(I)":
+            self.restoreBugProcess(self.information_page , selectedItemToRestore)
+
+
+    def restoreBugProcess(self , bugPage ,selectedItemToRestore ):
+        restoredItem = [selectedItemToRestore.data(0, 2), selectedItemToRestore.data(1, 2),
+                        selectedItemToRestore.data(2, 2)]
+        restoredItem = QTreeWidgetItem(restoredItem)
+        self.trace_page.addTopLevelItem(restoredItem)
+        restoredItem = [selectedItemToRestore.data(0, 2), selectedItemToRestore.data(1, 2),
+                        selectedItemToRestore.data(2, 2)]
+        restoredItem = QTreeWidgetItem(restoredItem)
+        bugPage.addTopLevelItem(restoredItem)
+
+        self.unwanted_log_info.currentItem().setHidden(True)
+
+        bug = Bug(repetition=selectedItemToRestore.data(0,2) ,level=selectedItemToRestore.data(1,2) , description=selectedItemToRestore.data(2,2))
+        print(Database.getBug(bug))
+        bug.setId(Database.getBug(bug)[0])
+        bugExchange = BugExchange(bug.getID() , ApiUtilities.EXCHANGE_ID)
+        Database.bugExchangedelete(bugExchange)
+        exist = Database.exist(bug)
+        if exist:
+            Database.delete(bug)
+
+
+
+
+
 
 # Error: analyze.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget1'.
 #
