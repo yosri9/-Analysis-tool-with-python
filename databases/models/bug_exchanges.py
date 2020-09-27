@@ -23,4 +23,8 @@ class BugExchange():
     def table(self):
         return 'bug_exchanges'
 
+    def getBugID(self):
+        return self.bugID
 
+    def getExchangeID(self):
+        return self.exchangeID

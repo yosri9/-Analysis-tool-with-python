@@ -17,10 +17,13 @@ import images
 from api import ApiUtilities
 from api.Bug import FetchBugs, bugFile
 
-from bug.bug import Bug
+from databases import Database
+from databases.models import Bug
+from databases.models.bug_exchanges import BugExchange
 
 
 class Ui_analyze(object):
+
     def setupUi(self, analyze):
         if not analyze.objectName():
             analyze.setObjectName(u"analyze")
@@ -472,6 +475,8 @@ class Ui_analyze(object):
                                       "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                       "}")
 
+
+
         self.gridLayout_error.addWidget(self.error_page, 0, 0, 1, 1)
 
         icon4 = QIcon()
@@ -855,6 +860,26 @@ class Ui_analyze(object):
                                              "QTreeView::item:selected:!active {\n"
                                              "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                              "}")
+
+        unwantedDataID = Database.getBugExchangeIDByExchangeID(BugExchange , ApiUtilities.EXCHANGE_ID)
+
+        print(unwantedDataID)
+        print("unwantedDataID")
+        self.bugData=[]
+        for data in unwantedDataID:
+            bugExchangeElement = BugExchange(data[0] , data[1])
+            item=list(Database.getByID(Bug , bugExchangeElement.getBugID()))
+            item.pop(0)
+            self.bugData.append(item )
+
+            print(item)
+
+            item = QTreeWidgetItem(item)
+            self.unwanted_log_info.addTopLevelItem(item)
+            print("--------------------------------------------------------")
+
+
+
         self.verticalLayout_3.addWidget(self.unwanted_log_info)
 
         self.verticalSpacer_3 = QSpacerItem(20, 18, QSizePolicy.Minimum, QSizePolicy.Fixed)
@@ -1045,18 +1070,33 @@ class Ui_analyze(object):
         ___qtreewidgetitem6.setText(2, QCoreApplication.translate("analyze", u"Message", None));
         ___qtreewidgetitem6.setText(1, QCoreApplication.translate("analyze", u"Level", None));
         self.quit_button.setText(QCoreApplication.translate("analyze", u"Quit", None))
+        self.hiddenWarningItemIndices = []
+        self.hiddenFailItemIndices = []
+        self.hiddenErrorItemIndices = []
+        self.hiddenInformationItemIndices = []
+        self.hiddenDebugItemIndices = []
+        self.hiddenTraceItemIndices = []
+
 
     # retranslateUi
 
+
     def addBugItems(self, bugPage, bugType):
         file = bugFile(bugType)
+        print(self.bugData)
         for line in file.readlines():
             while (line.startswith(" ")):
                 line = line[1::]
 
             line = line.split(" ", 2)
-            bug = QTreeWidgetItem(line)
-            bugPage.addTopLevelItem(bug)
+            # print(self.bugData)
+
+            print(line)
+            if  line not in self.bugData:
+                print(line)
+
+                bug = QTreeWidgetItem(line)
+                bugPage.addTopLevelItem(bug)
 
     @Slot()
     def getDirectory(self):
@@ -1089,64 +1129,157 @@ class Ui_analyze(object):
     @Slot()
     def addIgnoredItem(self):
         if self.tabWidget.currentIndex() == 0:
-            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.warning_page))
+            item ,itemIndex , selectedBug = self.addIgnoredPageItem(self.warning_page)
+            self.hiddenWarningItemIndices.append(itemIndex)
+            if self.hiddenWarningItemIndices.count(itemIndex) < 2:
+                self.unwanted_log_info.addTopLevelItem(item)
+                Database.insert(selectedBug)
         elif self.tabWidget.currentIndex() == 1:
-            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.fail_page))
-        elif self.tabWidget.currentIndex() == 2:
-            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.error_page))
-        elif self.tabWidget.currentIndex() == 3:
-            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.information_page))
-        elif self.tabWidget.currentIndex() == 4:
-            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.debug_page))
-        else:
-            self.unwanted_log_info.addTopLevelItem(self.addIgnoredPageItem(self.trace_page))
+            item, itemIndex,selectedBug  = self.addIgnoredPageItem(self.fail_page)
+            self.hiddenFailItemIndices.append(itemIndex)
+            if self.hiddenFailItemIndices.count(itemIndex) < 2:
+                self.unwanted_log_info.addTopLevelItem(item)
+                Database.insert(selectedBug)
 
+        elif self.tabWidget.currentIndex() == 2:
+            item, itemIndex , selectedBug = self.addIgnoredPageItem(self.error_page)
+            self.hiddenErrorItemIndices.append(itemIndex)
+            if self.hiddenErrorItemIndices.count(itemIndex) < 2:
+                self.unwanted_log_info.addTopLevelItem(item)
+                Database.insert(selectedBug)
+
+        elif self.tabWidget.currentIndex() == 3:
+            item, itemIndex , selectedBug = self.addIgnoredPageItem(self.information_page)
+            self.hiddenInformationItemIndices.append(itemIndex)
+            if self.hiddenInformationItemIndices.count(itemIndex) < 2:
+                self.unwanted_log_info.addTopLevelItem(item)
+                Database.insert(selectedBug)
+
+        elif self.tabWidget.currentIndex() == 4:
+            item, itemIndex ,selectedBug = self.addIgnoredPageItem(self.debug_page)
+            self.hiddenInformationItemIndices.append(itemIndex)
+            if self.hiddenDebugItemIndices.count(itemIndex) < 2:
+                self.unwanted_log_info.addTopLevelItem(item)
+                Database.insert(selectedBug)
+
+        else:
+            item, itemIndex , selectedBug = self.addIgnoredPageItem(self.trace_page)
+            self.hiddenTraceItemIndices.append(itemIndex)
+            if self.hiddenTraceItemIndices.count(itemIndex) < 2:
+               self.unwanted_log_info.addTopLevelItem(item)
+               Database.insert(selectedBug)
 
     def addIgnoredPageItem(self,bugPage):
-        selectedError = []
+
+        data = Database.getAll(Bug())
+        # hide ignoredItem from bugPage
+        selectedBugList = []
         for i in range(3):
-            selectedError.append(bugPage.currentItem().data(i, 2))
+            try:
+                selectedBugList.append(bugPage.currentItem().data(i, 2))
+            except Exception:
+                print(Exception)
             print(bugPage.currentItem().data(i, 2))
-        print(selectedError)
+        print(selectedBugList)
         print(bugPage.currentItem().data(2, 2))
-
-        selectedError = QTreeWidgetItem(selectedError)
+        print(selectedBugList)
+        selectedBug = Bug(None , selectedBugList[0] , selectedBugList[1] , selectedBugList[2])
+        print("selectedBug")
+        data = Database.getAll(Bug)
+        print(data)
+        selectedBugID = data[-1][0]
+        print(selectedBugID)
+        # insert bug_id , exchange_id in table bug_exchanges
+        Database.insert(BugExchange(selectedBugID , ApiUtilities.EXCHANGE_ID) )
+        selectedBugItem = QTreeWidgetItem(selectedBugList)
         bugPage.currentItem().setHidden(True)
-        items = self.trace_page.findItems( bugPage.currentItem().data(2,2) ,Qt.MatchFixedString | Qt.MatchRecursive , 2 )
-        for item in items:
-            if self.tabWidget.currentIndex() == 0 and item.text(1) == "(W)" :
-                self.trace_page.setCurrentItem(item)
-                self.trace_page.currentItem().setHidden(True)
-            elif self.tabWidget.currentIndex() == 1 and item.text(1) == "(F)" :
-                self.trace_page.setCurrentItem(item)
-                self.trace_page.currentItem().setHidden(True)
-            elif self.tabWidget.currentIndex() == 2 and item.text(1) == "(E)":
-                self.trace_page.setCurrentItem(item)
-                self.trace_page.currentItem().setHidden(True)
-            elif self.tabWidget.currentIndex() == 3 and item.text(1) == "(I)":
-                self.trace_page.setCurrentItem(item)
-                self.trace_page.currentItem().setHidden(True)
-            elif self.tabWidget.currentIndex() == 4 and item.text(1) == "(D)":
-                self.trace_page.setCurrentItem(item)
-                self.trace_page.currentItem().setHidden(True)
-            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(W)":
-                self.warning_page.setCurrentItem(item)
-                self.warning_page.currentItem().setHidden(True)
-            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(F)":
-                self.fail_page.setCurrentItem(item)
-                self.fail_page.currentItem().setHidden(True)
-            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(E)":
-                self.error_page.setCurrentItem(item)
-                self.error_page.currentItem().setHidden(True)
-            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(I)":
-                self.information_page.setCurrentItem(item)
-                self.information_page.currentItem().setHidden(True)
-            elif self.tabWidget.currentIndex() == 5 and item.text(1) == "(D)":
-                self.error_page.setCurrentItem(item)
-                self.error_page.currentItem().setHidden(True)
+        itemIndex=bugPage.currentIndex().row()
 
-            print(item.text(0))
-        return selectedError
+
+        # hide ignoredItem from related bugPage
+
+        traceItems = self.trace_page.findItems( bugPage.currentItem().data(2,2) ,Qt.MatchFixedString | Qt.MatchRecursive , 2 )
+        for traceItem in traceItems:
+            if self.tabWidget.currentIndex() == 0 and traceItem.text(1) == "(W)" :
+                self.trace_page.setCurrentItem(traceItem)
+                self.trace_page.currentItem().setHidden(True)
+                self.hiddenTraceItemIndices.append(self.trace_page.currentIndex().row())
+
+            elif self.tabWidget.currentIndex() == 1 and traceItem.text(1) == "(F)" :
+                self.trace_page.setCurrentItem(traceItem)
+                self.trace_page.currentItem().setHidden(True)
+                self.hiddenTraceItemIndices.append(self.trace_page.currentIndex().row())
+
+
+            elif self.tabWidget.currentIndex() == 2 and traceItem.text(1) == "(E)":
+                self.trace_page.setCurrentItem(traceItem)
+                self.trace_page.currentItem().setHidden(True)
+                self.hiddenTraceItemIndices.append(self.trace_page.currentIndex().row())
+
+            elif self.tabWidget.currentIndex() == 3 and traceItem.text(1) == "(I)":
+                self.trace_page.setCurrentItem(traceItem)
+                self.trace_page.currentItem().setHidden(True)
+                self.hiddenTraceItemIndices.append(self.trace_page.currentIndex().row())
+
+
+            elif self.tabWidget.currentIndex() == 4 and traceItem.text(1) == "(D)":
+                self.trace_page.setCurrentItem(traceItem)
+                self.trace_page.currentItem().setHidden(True)
+                self.hiddenTraceItemIndices.append(self.trace_page.currentIndex().row())
+
+
+            elif self.tabWidget.currentIndex() == 5 and traceItem.text(1) == "(W)":
+
+
+                items = self.warning_page.findItems(bugPage.currentItem().data(2, 2),
+                                                  Qt.MatchFixedString | Qt.MatchRecursive, 2)
+                for item in items:
+                    self.warning_page.setCurrentItem(item)
+                    self.warning_page.currentItem().setHidden(True)
+                    self.hiddenWarningItemIndices.append(self.warning_page.currentItem().row())
+            elif self.tabWidget.currentIndex() == 5 and traceItem.text(1) == "(F)":
+
+
+                items = self.fail_page.findItems(bugPage.currentItem().data(2, 2),
+                                                    Qt.MatchFixedString | Qt.MatchRecursive, 2)
+                for item in items:
+                     self.fail_page.setCurrentItem(item)
+                     self.fail_page.currentItem().setHidden(True)
+                     self.hiddenFailItemIndices.append(self.fail_page.currentIndex().row())
+            elif self.tabWidget.currentIndex() == 5 and traceItem.text(1) == "(E)":
+
+
+                items = self.error_page.findItems(bugPage.currentItem().data(2, 2),
+                                                 Qt.MatchFixedString | Qt.MatchRecursive, 2)
+                for item in items:
+                    self.error_page.setCurrentItem(item)
+                    self.error_page.currentItem().setHidden(True)
+                    self.hiddenErrorItemIndices.append(self.error_page.currentIndex().row())
+
+            elif self.tabWidget.currentIndex() == 5 and traceItem.text(1) == "(I)":
+
+
+
+                items = self.information_page.findItems(bugPage.currentItem().data(2, 2),
+                                                  Qt.MatchFixedString | Qt.MatchRecursive, 2)
+                for item in items:
+                    self.information_page.setCurrentItem(item)
+                    self.information_page.currentItem().setHidden(True)
+                    self.hiddenInformationItemIndices.append(self.information_page.currentIndex().row())
+
+            elif self.tabWidget.currentIndex() == 5 and traceItem.text(1) == "(D)":
+
+
+
+                items = self.debug_page.findItems(bugPage.currentItem().data(2, 2),
+                                                  Qt.MatchFixedString | Qt.MatchRecursive, 2)
+                for item in items:
+                    self.error_page.setCurrentItem(item)
+                    self.error_page.currentItem().setHidden(True)
+                    self.hiddenErrorItemIndices.append(self.error_page.currentIndex().row())
+
+
+        return selectedBugItem , itemIndex ,selectedBug
 
 # Error: analyze.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget1'.
 #

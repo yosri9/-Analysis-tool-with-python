@@ -77,12 +77,35 @@ class Database():
         conn.commit()
         db.close()
         conn.close()
+    def getByID(model , bugID):
+        conn = sqlite3.connect("analysis-tool.db")
+        db = conn.cursor()
+        sql_get_row = "SELECT * FROM " + model.table() + " WHERE ID = "+str(bugID)
+        print(sql_get_row)
+        db.execute(sql_get_row)
+        rows = db.fetchone()
+        db.close()
+        conn.close()
+
+        return rows
+
     def getAll(  model ):
         conn = sqlite3.connect("analysis-tool.db")
         db = conn.cursor()
         sql_get_all_rows ="SELECT * FROM " +model.table()
         print(sql_get_all_rows)
         db.execute(sql_get_all_rows )
+        rows = db.fetchall()
+        db.close()
+        conn.close()
+
+        return rows
+    def getBugExchangeIDByExchangeID(model , exchangeID):
+        conn = sqlite3.connect("analysis-tool.db")
+        db = conn.cursor()
+        sql_get_rows = "SELECT * FROM " + model.table() + " WHERE exchange_id = "+str(exchangeID)
+        print(sql_get_rows)
+        db.execute(sql_get_rows)
         rows = db.fetchall()
         db.close()
         conn.close()
