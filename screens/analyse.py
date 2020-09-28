@@ -1205,6 +1205,7 @@ class Ui_analyze(object):
         if Database.itemExist(selectedBug) ==0:
             Database.insert(selectedBug)
         dataInsterted = Database.getBug(selectedBug)
+        self.bugData.append(dataInsterted)
         selectedBugID = dataInsterted[0]
         # insert bug_id , exchange_id in table bug_exchanges
         Database.insert(BugExchange(selectedBugID , ApiUtilities.EXCHANGE_ID) )
@@ -1214,7 +1215,7 @@ class Ui_analyze(object):
         bugPage.currentItem().setHidden(True)
         itemIndex=bugPage.currentIndex().row()
 
-
+        self.bugDataRefresh()
         return selectedBugItem , itemIndex ,selectedBug
     @Slot()
     def restoreBug(self):
@@ -1245,10 +1246,17 @@ class Ui_analyze(object):
 
     def restoreBugProcess(self , bugPage ,selectedItemToRestore ):
 
-        restoredItem = [selectedItemToRestore.data(0, 2), selectedItemToRestore.data(1, 2),
+        restoredElement = [selectedItemToRestore.data(0, 2), selectedItemToRestore.data(1, 2),
                         selectedItemToRestore.data(2, 2)]
-        restoredItem = QTreeWidgetItem(restoredItem)
+        restoredItem = QTreeWidgetItem(restoredElement)
         bugPage.addTopLevelItem(restoredItem)
+        print(restoredElement)
+        print("************************************************************")
+
+        print(self.bugData)
+        self.bugData.remove(restoredElement)
+        print("************************************************************")
+        print(self.bugData)
 
         self.unwanted_log_info.currentItem().setHidden(True)
 
@@ -1260,58 +1268,83 @@ class Ui_analyze(object):
         exist = Database.exist(bug)
         if exist == 0:
             Database.delete(bug)
-
+        self.bugDataRefresh()
+    @Slot()
     def getUnwatedBug(self):
 
-        unwantedDataID = Database.getBugExchangeIDByExchangeID(BugExchange , ApiUtilities.EXCHANGE_ID)
+        self.bugDataRefresh()
+        self.showUnwantedBug
 
-        print(unwantedDataID)
-        print("unwantedDataID")
-        self.bugData=[]
-        self.bugExchangeID = []
 
-        for data in unwantedDataID:
-            bugExchangeElement = BugExchange(data[0] , data[1])
-            self.bugExchangeID.append(bugExchangeElement)
-            try:
-                item=list(Database.getByID(Bug , bugExchangeElement.getBugID()))
-                item.pop(0)
-
-                self.bugData.append(item )
-
-                print(item)
-            except Exception:
-                print(Exception)
-            self.showUnwantedBug
-
-            print("--------------------------------------------------------")
-
-    @Slot()
     def showUnwantedBug(self):
         self.unwanted_log_info.clear()
+        print("--------------------------------------------------------")
+        print("--------------------------------------------------------")
+        print("--------------------------------------------------------")
+
+        print(self.bugData)
+
+        print("--------------------------------------------------------")
+        print("--------------------------------------------------------")
+
         for item in self.bugData:
             if self.tabWidget.currentIndex() ==0 and item[1] == "(W)":
                 item = QTreeWidgetItem(item)
                 self.unwanted_log_info.addTopLevelItem(item)
 
+
+
             elif self.tabWidget.currentIndex() == 1 and item[1] == "(F)":
                 item = QTreeWidgetItem(item)
                 self.unwanted_log_info.addTopLevelItem(item)
+
+
 
             elif self.tabWidget.currentIndex() == 2 and item[1] == "(E)":
                 item = QTreeWidgetItem(item)
                 self.unwanted_log_info.addTopLevelItem(item)
 
+
             elif self.tabWidget.currentIndex() == 3 and item[1] == "(I)":
                 item = QTreeWidgetItem(item)
                 self.unwanted_log_info.addTopLevelItem(item)
 
+
+
             elif self.tabWidget.currentIndex() == 4 and item[1] == "(D)":
                 item = QTreeWidgetItem(item)
                 self.unwanted_log_info.addTopLevelItem(item)
+
+
             elif self.tabWidget.currentIndex() == 5 and item[1] == "(T)":
                 item = QTreeWidgetItem(item)
                 self.unwanted_log_info.addTopLevelItem(item)
+
+
+    def bugDataRefresh(self):
+
+
+        unwantedDataID = Database.getBugExchangeIDByExchangeID(BugExchange, ApiUtilities.EXCHANGE_ID)
+
+        print(unwantedDataID)
+        print("unwantedDataID")
+        self.bugData = []
+        self.bugExchangeID = []
+
+        for data in unwantedDataID:
+            bugExchangeElement = BugExchange(data[0], data[1])
+            self.bugExchangeID.append(bugExchangeElement)
+            try:
+                item = list(Database.getByID(Bug, bugExchangeElement.getBugID()))
+                item.pop(0)
+
+                self.bugData.append(item)
+
+                print(item)
+            except Exception:
+                print(Exception)
+
+
     @Slot()
     def memorizeAllExchange(self):
         bugExchangeData=set(Database.getAll(BugExchange))
