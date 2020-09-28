@@ -43,11 +43,8 @@ def bugFile(bugType):
 
 
 def bugExtractorCommand(bugType):
-    grep = ""
-    command = "  cut -d \" \" -f 2- " + ApiUtilities.LOG_FILE_PATH + " |sort | uniq -c | sort -nr" + grep + "> " + ApiUtilities.PATH + bugType + ".txt "
 
-    if bugType != "Trace":
         grep = "| grep \'(" + bugType[0] + ")\'"
         command = "  cut -d \" \" -f 2- " + ApiUtilities.LOG_FILE_PATH + " |sort | uniq -c | sort -nr" + grep + "> " + ApiUtilities.PATH + bugType + ".txt "
 
-    return command
+        return command

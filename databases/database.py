@@ -142,8 +142,19 @@ class Database():
         db.close()
         conn.close()
 
-        return exist
+        return int(exist[0])
 
+    def itemExist(model):
+        conn = sqlite3.connect("analysis-tool.db")
+        db = conn.cursor()
+        sql_bug_existance = " SELECT EXISTS(SELECT * FROM " + model.table() + " WHERE ( level = \"" + model.getLevel() + "\" and description = \"" + model.getDescription() + "\"))"
+        print(sql_bug_existance)
+        db.execute(sql_bug_existance)
+        exist = db.fetchone()
+        db.close()
+        conn.close()
+
+        return int(exist[0])
 
 
 

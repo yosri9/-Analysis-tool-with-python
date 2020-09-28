@@ -838,6 +838,7 @@ class Ui_boursewindoww(object):
         selectedItemData = None
 
         for id , name in self.IDNameMap.items():
+            print(self.IDNameMap)
             if( name == str(selectedItem.text() )):
                 selectedItemID = id
                 ApiUtilities.EXCHANGE_ID = id
