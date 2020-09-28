@@ -18,7 +18,7 @@ from api import ApiUtilities
 from api.Bug import FetchBugs, bugFile
 
 from databases import Database
-from databases.models import Bug
+from databases.models import Bug, Exchange
 from databases.models.bug_exchanges import BugExchange
 
 
@@ -738,7 +738,7 @@ class Ui_analyze(object):
                                                 "}")
         self.memorize_allexchange.setIcon(icon9)
         self.memorize_allexchange.setIconSize(QSize(32, 32))
-
+        self.memorize_allexchange.clicked.connect(self.memorizeAllExchange)
         self.verticalLayout_5.addWidget(self.memorize_allexchange)
 
         self.label_7 = QLabel(self.centralwidget)
@@ -1047,7 +1047,6 @@ class Ui_analyze(object):
         ___qtreewidgetitem5.setText(0, QCoreApplication.translate("analyze", u"number of occurrences", None));
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.trace_tab),
                                   QCoreApplication.translate("analyze", u"TRACE", None))
-        # self.tabWidget.activateWindow()
         # if QT_CONFIG(tooltip)
         self.ignoreButton.setToolTip(QCoreApplication.translate("analyze",
                                                                 u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Clic here to save the selected error in the database and delete it from the log file </span></p></body></html>",
@@ -1388,7 +1387,15 @@ class Ui_analyze(object):
                 item = QTreeWidgetItem(item)
                 self.unwanted_log_info.addTopLevelItem(item)
 
-
+    @Slot()
+    def memorizeAllExchange(self):
+        bugExchangeData=set(Database.getAll(BugExchange))
+        exchangeData = Database.getAll(Exchange)
+        for exchangeDataElement in exchangeData:
+            for bugExchangeDataElement in bugExchangeData:
+                bugExchange = BugExchange(bugExchangeDataElement[0] , exchangeDataElement[0])
+                if  bugExchange.toList()  not  in bugExchangeData:
+                    Database.insert(bugExchange)
 # Error: analyze.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget1'.
 #
 # analyze.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget2'.
