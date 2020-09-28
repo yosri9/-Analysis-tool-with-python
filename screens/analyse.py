@@ -334,7 +334,11 @@ class Ui_analyze(object):
                                      "    border-color: #9B9B9B;\n"
                                      "    border-bottom-color: #C2C7CB; /* same as pane color */\n"
                                      "}")
-        self.warning_tab = QWidget()
+        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.currentChanged.connect(self.showUnwantedBug)
+
+
+        self.warning_tab = QPushButton()
         self.warning_tab.setObjectName(u"warning_tab")
         self.gridLayout = QGridLayout(self.warning_tab)
         self.gridLayout.setObjectName(u"gridLayout")
@@ -385,12 +389,13 @@ class Ui_analyze(object):
                                         "QTreeView::item:selected:!active {\n"
                                         "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                         "}")
+        self.warning_page.clicked.connect(self.showUnwantedBug)
         self.gridLayout.addWidget(self.warning_page, 0, 0, 1, 1)
 
         icon2 = QIcon()
         icon2.addFile(u"images/Warning_icon..png", QSize(), QIcon.Normal, QIcon.Off)
         self.tabWidget.addTab(self.warning_tab, icon2, "")
-        self.fail_tab = QWidget()
+        self.fail_tab = QPushButton()
         self.fail_tab.setObjectName(u"fail_tab")
         self.gridLayout_12 = QGridLayout(self.fail_tab)
         self.gridLayout_12.setObjectName(u"gridLayout_12")
@@ -431,13 +436,13 @@ class Ui_analyze(object):
                                      "QTreeView::item:selected:!active {\n"
                                      "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                      "}")
-
+        self.fail_tab.clicked.connect(self.showUnwantedBug)
         self.gridLayout_12.addWidget(self.fail_page, 0, 0, 1, 1)
 
         icon3 = QIcon()
         icon3.addFile(u"images/fail.png", QSize(), QIcon.Normal, QIcon.Off)
         self.tabWidget.addTab(self.fail_tab, icon3, "")
-        self.error_tab = QWidget()
+        self.error_tab = QPushButton()
         self.error_tab.setObjectName(u"error_tab")
         self.gridLayout_error = QGridLayout(self.error_tab)
         self.gridLayout_error.setObjectName(u"gridLayout_error")
@@ -476,13 +481,14 @@ class Ui_analyze(object):
                                       "}")
 
 
+        self.error_tab.clicked.connect(self.showUnwantedBug)
 
         self.gridLayout_error.addWidget(self.error_page, 0, 0, 1, 1)
 
         icon4 = QIcon()
         icon4.addFile(u"images/error-icon.jpg", QSize(), QIcon.Normal, QIcon.Off)
         self.tabWidget.addTab(self.error_tab, icon4, "")
-        self.information_tab = QWidget()
+        self.information_tab = QPushButton()
         self.information_tab.setObjectName(u"information_tab")
         self.gridLayout_information = QGridLayout(self.information_tab)
         self.gridLayout_information.setObjectName(u"gridLayout_information")
@@ -522,13 +528,13 @@ class Ui_analyze(object):
                                             "QTreeView::item:selected:!active {\n"
                                             "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                             "}")
-
+        self.information_tab.clicked.connect(self.showUnwantedBug)
         self.gridLayout_information.addWidget(self.information_page, 0, 0, 1, 1)
 
         icon5 = QIcon()
         icon5.addFile(u"images/information.png", QSize(), QIcon.Normal, QIcon.Off)
         self.tabWidget.addTab(self.information_tab, icon5, "")
-        self.debug_tab = QWidget()
+        self.debug_tab = QPushButton()
         self.debug_tab.setObjectName(u"debug_tab")
         self.gridLayout_debug = QGridLayout(self.debug_tab)
         self.gridLayout_debug.setObjectName(u"gridLayout_debug")
@@ -565,7 +571,7 @@ class Ui_analyze(object):
                                       "QTreeView::item:selected:!active {\n"
                                       "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                       "}")
-
+        self.debug_tab.clicked.connect(self.showUnwantedBug)
         self.gridLayout_debug.addWidget(self.debug_page, 0, 0, 1, 1)
 
         icon6 = QIcon()
@@ -862,26 +868,27 @@ class Ui_analyze(object):
                                              "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                              "}")
 
-        unwantedDataID = Database.getBugExchangeIDByExchangeID(BugExchange , ApiUtilities.EXCHANGE_ID)
-
-        print(unwantedDataID)
-        print("unwantedDataID")
-        self.bugData=[]
-        self.bugExchangeID = []
-
-        for data in unwantedDataID:
-            bugExchangeElement = BugExchange(data[0] , data[1])
-            self.bugExchangeID.append(bugExchangeElement)
-            item=list(Database.getByID(Bug , bugExchangeElement.getBugID()))
-            item.pop(0)
-            self.bugData.append(item )
-
-            print(item)
-
-            item = QTreeWidgetItem(item)
-            self.unwanted_log_info.addTopLevelItem(item)
-            print("--------------------------------------------------------")
-
+        # unwantedDataID = Database.getBugExchangeIDByExchangeID(BugExchange , ApiUtilities.EXCHANGE_ID)
+        #
+        # print(unwantedDataID)
+        # print("unwantedDataID")
+        # self.bugData=[]
+        # self.bugExchangeID = []
+        #
+        # for data in unwantedDataID:
+        #     bugExchangeElement = BugExchange(data[0] , data[1])
+        #     self.bugExchangeID.append(bugExchangeElement)
+        #     item=list(Database.getByID(Bug , bugExchangeElement.getBugID()))
+        #     item.pop(0)
+        #     self.bugData.append(item )
+        #
+        #     print(item)
+        #
+        #     item = QTreeWidgetItem(item)
+        #     self.unwanted_log_info.addTopLevelItem(item)
+        #
+        #     print("--------------------------------------------------------")
+        #
 
 
         self.verticalLayout_3.addWidget(self.unwanted_log_info)
@@ -1074,12 +1081,19 @@ class Ui_analyze(object):
         ___qtreewidgetitem6.setText(2, QCoreApplication.translate("analyze", u"Message", None));
         ___qtreewidgetitem6.setText(1, QCoreApplication.translate("analyze", u"Level", None));
         self.quit_button.setText(QCoreApplication.translate("analyze", u"Quit", None))
+
+
         self.hiddenWarningItemIndices = []
         self.hiddenFailItemIndices = []
         self.hiddenErrorItemIndices = []
         self.hiddenInformationItemIndices = []
         self.hiddenDebugItemIndices = []
         self.hiddenTraceItemIndices = []
+        self.getUnwatedBug()
+        self.showUnwantedBug()
+
+
+
 
 
     # retranslateUi
@@ -1132,6 +1146,8 @@ class Ui_analyze(object):
 
     @Slot()
     def addIgnoredItem(self):
+
+
         if self.tabWidget.currentIndex() == 0:
             item ,itemIndex , selectedBug = self.addIgnoredPageItem(self.warning_page)
             self.hiddenWarningItemIndices.append(itemIndex)
@@ -1327,9 +1343,50 @@ class Ui_analyze(object):
         if exist:
             Database.delete(bug)
 
+    def getUnwatedBug(self):
 
+        unwantedDataID = Database.getBugExchangeIDByExchangeID(BugExchange , ApiUtilities.EXCHANGE_ID)
 
+        print(unwantedDataID)
+        print("unwantedDataID")
+        self.bugData=[]
+        self.bugExchangeID = []
+        for data in unwantedDataID:
+            bugExchangeElement = BugExchange(data[0] , data[1])
+            self.bugExchangeID.append(bugExchangeElement)
+            item=list(Database.getByID(Bug , bugExchangeElement.getBugID()))
+            item.pop(0)
 
+            self.bugData.append(item )
+
+            print(item)
+            self.showUnwantedBug
+
+            print("--------------------------------------------------------")
+
+    @Slot()
+    def showUnwantedBug(self):
+        self.unwanted_log_info.clear()
+        for item in self.bugData:
+            if self.tabWidget.currentIndex() ==0 and item[1] == "(W)":
+                item = QTreeWidgetItem(item)
+                self.unwanted_log_info.addTopLevelItem(item)
+
+            elif self.tabWidget.currentIndex() == 1 and item[1] == "(F)":
+                item = QTreeWidgetItem(item)
+                self.unwanted_log_info.addTopLevelItem(item)
+
+            elif self.tabWidget.currentIndex() == 2 and item[1] == "(E)":
+                item = QTreeWidgetItem(item)
+                self.unwanted_log_info.addTopLevelItem(item)
+
+            elif self.tabWidget.currentIndex() == 3 and item[1] == "(I)":
+                item = QTreeWidgetItem(item)
+                self.unwanted_log_info.addTopLevelItem(item)
+
+            elif self.tabWidget.currentIndex() == 4 and item[1] == "(D)":
+                item = QTreeWidgetItem(item)
+                self.unwanted_log_info.addTopLevelItem(item)
 
 
 # Error: analyze.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget1'.
