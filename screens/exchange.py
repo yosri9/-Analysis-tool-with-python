@@ -293,7 +293,6 @@ class Ui_boursewindoww(object):
         self.QUIT.setAutoRepeat(False)
         self.QUIT.setAutoDefault(False)
         self.QUIT.setFlat(False)
-
         self.verticalLayout_3.addWidget(self.QUIT)
 
         self.verticalLayout_4.addLayout(self.verticalLayout_3)
@@ -461,6 +460,7 @@ class Ui_boursewindoww(object):
                                        "    selection-background-color: darkgray;\n"
                                        "	font: 75 12pt \"Arial\";\n"
                                        "}")
+        self.search_text.textChanged.connect(self.showWantedItem)
 
         self.horizontalLayout.addWidget(self.search_text)
 
@@ -569,14 +569,7 @@ class Ui_boursewindoww(object):
         self.listbourse.setWordWrap(False)
         self.listbourse.setSelectionRectVisible(False)
         self.listbourse.setSortingEnabled(True)
-        Database.analysisToolDatabase()
 
-
-        self.IDNameMap = {}
-        for exchange in Database.getAll(Exchange):
-            self.IDNameMap[exchange[0]] = exchange[1]
-            item = QListWidgetItem(exchange[1])
-            self.listbourse.addItem(item)
         self.verticalLayout_2.addWidget(self.listbourse)
 
         self.horizontalLayout_2 = QHBoxLayout()
@@ -747,7 +740,6 @@ class Ui_boursewindoww(object):
                                    "                                      stop: 0 #f6f7fa, stop: 1 #dadbde);\n"
                                    "    min-width: 80px;\n"
                                    "}")
-
         self.horizontalLayout_2.addWidget(self.label_3)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
@@ -805,6 +797,17 @@ class Ui_boursewindoww(object):
         self.label_3.setText(QCoreApplication.translate("boursewindoww", u"0", None))
 
     # retranslateUi
+        Database.analysisToolDatabase()
+
+        self.IDNameMap = {}
+        i = 0
+        for exchange in Database.getAll(Exchange):
+            i += 1
+            self.IDNameMap[exchange[0]] = exchange[1]
+            item = QListWidgetItem(exchange[1])
+            self.listbourse.addItem(item)
+            self.label_3.setText(str(i))
+
     @Slot()
     def addExchangeItem(self):
             oldData = Database.getAll(Exchange)
@@ -818,6 +821,7 @@ class Ui_boursewindoww(object):
                 item = QListWidgetItem(newData[-1][1])
                 self.listbourse.addItem(item)
                 self.IDNameMap[newData[-1][0]] = newData[-1][1]
+            self.label_3.setText(str(self.listbourse.count()))
 
     @Slot()
     def deleteExchangeItem(self):
@@ -825,12 +829,14 @@ class Ui_boursewindoww(object):
            itemName = ""
            if item is not None:
                 itemName = item.text()
+
            for id , name in self.IDNameMap.items():
                 if itemName == name:
                         self.IDNameMap.pop(id)
                         Database.delete(Exchange(id))
                         self.listbourse.currentItem().setHidden(True)
                         print(self.IDNameMap)
+           self.label_3.setText(str(self.listbourse.count()))
 
     @Slot()
     def goToAnalysisWindow(self):
@@ -867,6 +873,18 @@ class Ui_boursewindoww(object):
         window.show()
         window.setAutoFillBackground()
 
+    @Slot()
+    def showWantedItem(self):
+        self.listbourse.clear()
+        exchange = Exchange(exchangeName=self.search_text.text())
+        print(self.search_text.text())
+        items = Database.findExchangeItem(exchange)
+        print(items)
+        for item in items:
+            exchangeToShow = QListWidgetItem(item[1])
+            print(item)
+            self.listbourse.addItem(exchangeToShow)
+        self.label_3.setText(str(self.listbourse.count()))
 
 
 

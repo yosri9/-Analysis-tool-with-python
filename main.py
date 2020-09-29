@@ -2,6 +2,7 @@ import random
 import sys
 
 from PySide2 import QtWidgets
+from PySide2.QtCore import Slot, QCoreApplication
 from PySide2.QtWidgets import QApplication, QMainWindow
 
 from screens.analyse import Ui_analyze
@@ -21,7 +22,9 @@ if __name__ == "__main__":
 
     window =MainWindow()
     window.show()
+
     sys.exit(app.exec_())
+
 
 
 # def magic(self):

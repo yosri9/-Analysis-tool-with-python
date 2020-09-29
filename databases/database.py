@@ -1,7 +1,7 @@
 import sqlite3
 
 from api import ApiUtilities
-from databases.models import Exchange
+from databases.models import Exchange, Bug
 
 
 class Database():
@@ -78,12 +78,33 @@ class Database():
         conn.commit()
         db.close()
         conn.close()
+
     def delete(model):
         conn = sqlite3.connect("analysis-tool.db")
         db = conn.cursor()
         sql_delete_row = "DELETE FROM " + model.table() + " WHERE( id = " +str(model.getID()) +" )"
         print(sql_delete_row)
         db.execute(sql_delete_row)
+        if model.table() == 'exchanges':
+            sql_delete_rows = "DELETE FROM bug_exchanges WHERE  exchange_id = "+ str(model.getID())
+            sql_get_rows="SELECT * FROM bug_exchanges WHERE  exchange_id = "+ str(model.getID())
+            db.execute(sql_get_rows)
+            rows = db.fetchall()
+
+            db.execute(sql_delete_rows)
+            conn.commit()
+            db.close()
+            conn.close()
+            print("*************************************************************************")
+            print(rows)
+            conn = sqlite3.connect("analysis-tool.db")
+            db = conn.cursor()
+            for row in rows:
+                bug = Bug(row[0])
+                print(Database.exist(bug))
+                if Database.exist(bug) == 0:
+                    Database.delete(bug)
+
         conn.commit()
         db.close()
         conn.close()
@@ -156,5 +177,16 @@ class Database():
 
         return int(exist[0])
 
+
+    def findExchangeItem(exchange):
+        conn = sqlite3.connect("analysis-tool.db")
+        db = conn.cursor()
+        sql_get_rows = "SELECT * FROM " + exchange.table() + " WHERE name LIKE '%" + exchange.getName() +"%'"
+        print(sql_get_rows)
+        db.execute(sql_get_rows)
+        rows = db.fetchall()
+        db.close()
+        conn.close()
+        return rows
 
 

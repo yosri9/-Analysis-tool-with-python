@@ -337,7 +337,6 @@ class Ui_analyze(object):
         self.tabWidget.setCurrentIndex(0)
         self.tabWidget.currentChanged.connect(self.showUnwantedBug)
 
-
         self.warning_tab = QPushButton()
         self.warning_tab.setObjectName(u"warning_tab")
         self.gridLayout = QGridLayout(self.warning_tab)
@@ -477,8 +476,6 @@ class Ui_analyze(object):
                                       "QTreeView::item:selected:!active {\n"
                                       "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);\n"
                                       "}")
-
-
 
         self.gridLayout_error.addWidget(self.error_page, 0, 0, 1, 1)
 
@@ -885,7 +882,6 @@ class Ui_analyze(object):
         #     print("--------------------------------------------------------")
         #
 
-
         self.verticalLayout_3.addWidget(self.unwanted_log_info)
 
         self.verticalSpacer_3 = QSpacerItem(20, 18, QSizePolicy.Minimum, QSizePolicy.Fixed)
@@ -1076,7 +1072,6 @@ class Ui_analyze(object):
         ___qtreewidgetitem6.setText(1, QCoreApplication.translate("analyze", u"Level", None));
         self.quit_button.setText(QCoreApplication.translate("analyze", u"Quit", None))
 
-
         self.hiddenWarningItemIndices = []
         self.hiddenFailItemIndices = []
         self.hiddenErrorItemIndices = []
@@ -1086,12 +1081,7 @@ class Ui_analyze(object):
         self.getUnwatedBug()
         self.showUnwantedBug()
 
-
-
-
-
     # retranslateUi
-
 
     def addBugItems(self, bugPage, bugType):
         file = bugFile(bugType)
@@ -1104,7 +1094,7 @@ class Ui_analyze(object):
             # print(self.bugData)
 
             print(line)
-            if  line not in self.bugData:
+            if line not in self.bugData:
                 print(line)
 
                 bug = QTreeWidgetItem(line)
@@ -1140,49 +1130,50 @@ class Ui_analyze(object):
 
     @Slot()
     def addIgnoredItem(self):
+        try:
+
+            if self.tabWidget.currentIndex() == 0:
+                item, itemIndex, selectedBug = self.addIgnoredPageItem(self.warning_page)
+                self.hiddenWarningItemIndices.append(itemIndex)
+                if self.hiddenErrorItemIndices.count(itemIndex) < 2:
+                    self.unwanted_log_info.addTopLevelItem(item)
+
+            elif self.tabWidget.currentIndex() == 1:
+                item, itemIndex, selectedBug = self.addIgnoredPageItem(self.fail_page)
+                self.hiddenFailItemIndices.append(itemIndex)
+                if self.hiddenErrorItemIndices.count(itemIndex) < 2:
+                    self.unwanted_log_info.addTopLevelItem(item)
 
 
-        if self.tabWidget.currentIndex() == 0:
-            item ,itemIndex , selectedBug = self.addIgnoredPageItem(self.warning_page)
-            self.hiddenWarningItemIndices.append(itemIndex)
-            if self.hiddenErrorItemIndices.count(itemIndex) < 2:
-                self.unwanted_log_info.addTopLevelItem(item)
-
-        elif self.tabWidget.currentIndex() == 1:
-            item, itemIndex,selectedBug  = self.addIgnoredPageItem(self.fail_page)
-            self.hiddenFailItemIndices.append(itemIndex)
-            if self.hiddenErrorItemIndices.count(itemIndex) < 2:
-                self.unwanted_log_info.addTopLevelItem(item)
+            elif self.tabWidget.currentIndex() == 2:
+                item, itemIndex, selectedBug = self.addIgnoredPageItem(self.error_page)
+                self.hiddenErrorItemIndices.append(itemIndex)
+                if self.hiddenErrorItemIndices.count(itemIndex) < 2:
+                    self.unwanted_log_info.addTopLevelItem(item)
 
 
-        elif self.tabWidget.currentIndex() == 2:
-            item, itemIndex , selectedBug = self.addIgnoredPageItem(self.error_page)
-            self.hiddenErrorItemIndices.append(itemIndex)
-            if self.hiddenErrorItemIndices.count(itemIndex) < 2:
-                self.unwanted_log_info.addTopLevelItem(item)
+            elif self.tabWidget.currentIndex() == 3:
+                item, itemIndex, selectedBug = self.addIgnoredPageItem(self.information_page)
+                self.hiddenInformationItemIndices.append(itemIndex)
+                if self.hiddenErrorItemIndices.count(itemIndex) < 2:
+                    self.unwanted_log_info.addTopLevelItem(item)
 
 
-        elif self.tabWidget.currentIndex() == 3:
-            item, itemIndex , selectedBug = self.addIgnoredPageItem(self.information_page)
-            self.hiddenInformationItemIndices.append(itemIndex)
-            if self.hiddenErrorItemIndices.count(itemIndex) < 2:
-                self.unwanted_log_info.addTopLevelItem(item)
+            elif self.tabWidget.currentIndex() == 4:
+                item, itemIndex, selectedBug = self.addIgnoredPageItem(self.debug_page)
+                self.hiddenInformationItemIndices.append(itemIndex)
+                if self.hiddenErrorItemIndices.count(itemIndex) < 2:
+                    self.unwanted_log_info.addTopLevelItem(item)
 
 
-        elif self.tabWidget.currentIndex() == 4:
-            item, itemIndex ,selectedBug = self.addIgnoredPageItem(self.debug_page)
-            self.hiddenInformationItemIndices.append(itemIndex)
-            if self.hiddenErrorItemIndices.count(itemIndex) < 2:
-                self.unwanted_log_info.addTopLevelItem(item)
-
-
-        else:
-            item, itemIndex , selectedBug = self.addIgnoredPageItem(self.trace_page)
-            self.hiddenTraceItemIndices.append(itemIndex)
-            if self.hiddenErrorItemIndices.count(itemIndex) < 2:
-                self.unwanted_log_info.addTopLevelItem(item)
-
-    def addIgnoredPageItem(self,bugPage):
+            else:
+                item, itemIndex, selectedBug = self.addIgnoredPageItem(self.trace_page)
+                self.hiddenTraceItemIndices.append(itemIndex)
+                if self.hiddenErrorItemIndices.count(itemIndex) < 2:
+                    self.unwanted_log_info.addTopLevelItem(item)
+        except Exception:
+            print(Exception)
+    def addIgnoredPageItem(self, bugPage):
         global selectedBug, selectedBug, itemIndex, selectedBugItem
         selectedBugItem = None
         selectedBug = None
@@ -1197,57 +1188,57 @@ class Ui_analyze(object):
             except Exception:
                 print(Exception)
 
-        selectedBug = Bug(None , selectedBugList[0] , selectedBugList[1] , selectedBugList[2])
+        selectedBug = Bug(None, selectedBugList[0], selectedBugList[1], selectedBugList[2])
         print("selectedBug")
         print("--------------------------------------------------------------------------------------------")
         data = Database.getAll(Bug)
         print(data)
-        if Database.itemExist(selectedBug) ==0:
+        if Database.itemExist(selectedBug) == 0:
             Database.insert(selectedBug)
         dataInsterted = Database.getBug(selectedBug)
         self.bugData.append(dataInsterted)
         selectedBugID = dataInsterted[0]
         # insert bug_id , exchange_id in table bug_exchanges
-        Database.insert(BugExchange(selectedBugID , ApiUtilities.EXCHANGE_ID) )
-
+        Database.insert(BugExchange(selectedBugID, ApiUtilities.EXCHANGE_ID))
 
         selectedBugItem = QTreeWidgetItem(selectedBugList)
         bugPage.currentItem().setHidden(True)
-        itemIndex=bugPage.currentIndex().row()
+        itemIndex = bugPage.currentIndex().row()
 
         self.bugDataRefresh()
-        return selectedBugItem , itemIndex ,selectedBug
+        return selectedBugItem, itemIndex, selectedBug
+
     @Slot()
     def restoreBug(self):
-      try:
-        selectedItemToRestore = self.unwanted_log_info.currentItem()
-        if selectedItemToRestore.data(1,2) == "(W)" :
-            self.restoreBugProcess(self.warning_page , selectedItemToRestore)
+        try:
+            selectedItemToRestore = self.unwanted_log_info.currentItem()
+            if selectedItemToRestore.data(1, 2) == "(W)":
+                self.restoreBugProcess(self.warning_page, selectedItemToRestore)
 
-        elif selectedItemToRestore.data(1,2) == "(F)" :
-            self.restoreBugProcess(self.fail_page , selectedItemToRestore)
-
-
-        elif selectedItemToRestore.data(1, 2) == "(E)":
-            self.restoreBugProcess(self.error_page , selectedItemToRestore)
+            elif selectedItemToRestore.data(1, 2) == "(F)":
+                self.restoreBugProcess(self.fail_page, selectedItemToRestore)
 
 
-        elif selectedItemToRestore.data(1, 2) == "(D)":
-            self.restoreBugProcess(self.debug_page , selectedItemToRestore)
+            elif selectedItemToRestore.data(1, 2) == "(E)":
+                self.restoreBugProcess(self.error_page, selectedItemToRestore)
 
 
-        elif selectedItemToRestore.data(1, 2) == "(I)":
-            self.restoreBugProcess(self.information_page , selectedItemToRestore)
+            elif selectedItemToRestore.data(1, 2) == "(D)":
+                self.restoreBugProcess(self.debug_page, selectedItemToRestore)
 
-        elif selectedItemToRestore.data(1, 2) == "(T)":
-            self.restoreBugProcess(self.trace_page, selectedItemToRestore)
-      except Exception:
-          print(Exception)
 
-    def restoreBugProcess(self , bugPage ,selectedItemToRestore ):
+            elif selectedItemToRestore.data(1, 2) == "(I)":
+                self.restoreBugProcess(self.information_page, selectedItemToRestore)
+
+            elif selectedItemToRestore.data(1, 2) == "(T)":
+                self.restoreBugProcess(self.trace_page, selectedItemToRestore)
+        except Exception:
+            print(Exception)
+
+    def restoreBugProcess(self, bugPage, selectedItemToRestore):
 
         restoredElement = [selectedItemToRestore.data(0, 2), selectedItemToRestore.data(1, 2),
-                        selectedItemToRestore.data(2, 2)]
+                           selectedItemToRestore.data(2, 2)]
         restoredItem = QTreeWidgetItem(restoredElement)
         bugPage.addTopLevelItem(restoredItem)
         print(restoredElement)
@@ -1260,21 +1251,22 @@ class Ui_analyze(object):
 
         self.unwanted_log_info.currentItem().setHidden(True)
 
-        bug = Bug(repetition=selectedItemToRestore.data(0,2) ,level=selectedItemToRestore.data(1,2) , description=selectedItemToRestore.data(2,2))
+        bug = Bug(repetition=selectedItemToRestore.data(0, 2), level=selectedItemToRestore.data(1, 2),
+                  description=selectedItemToRestore.data(2, 2))
         print(Database.getBug(bug))
         bug.setId(Database.getBug(bug)[0])
-        bugExchange = BugExchange(bug.getID() , ApiUtilities.EXCHANGE_ID)
+        bugExchange = BugExchange(bug.getID(), ApiUtilities.EXCHANGE_ID)
         Database.bugExchangedelete(bugExchange)
         exist = Database.exist(bug)
         if exist == 0:
             Database.delete(bug)
         self.bugDataRefresh()
+
     @Slot()
     def getUnwatedBug(self):
 
         self.bugDataRefresh()
         self.showUnwantedBug
-
 
     def showUnwantedBug(self):
         self.unwanted_log_info.clear()
@@ -1288,7 +1280,7 @@ class Ui_analyze(object):
         print("--------------------------------------------------------")
 
         for item in self.bugData:
-            if self.tabWidget.currentIndex() ==0 and item[1] == "(W)":
+            if self.tabWidget.currentIndex() == 0 and item[1] == "(W)":
                 item = QTreeWidgetItem(item)
                 self.unwanted_log_info.addTopLevelItem(item)
 
@@ -1320,9 +1312,7 @@ class Ui_analyze(object):
                 item = QTreeWidgetItem(item)
                 self.unwanted_log_info.addTopLevelItem(item)
 
-
     def bugDataRefresh(self):
-
 
         unwantedDataID = Database.getBugExchangeIDByExchangeID(BugExchange, ApiUtilities.EXCHANGE_ID)
 
@@ -1344,15 +1334,14 @@ class Ui_analyze(object):
             except Exception:
                 print(Exception)
 
-
     @Slot()
     def memorizeAllExchange(self):
-        bugExchangeData=set(Database.getAll(BugExchange))
+        bugExchangeData = set(Database.getAll(BugExchange))
         exchangeData = Database.getAll(Exchange)
         for exchangeDataElement in exchangeData:
             for bugExchangeDataElement in bugExchangeData:
-                bugExchange = BugExchange(bugExchangeDataElement[0] , exchangeDataElement[0])
-                if  bugExchange.toList()  not  in bugExchangeData:
+                bugExchange = BugExchange(bugExchangeDataElement[0], exchangeDataElement[0])
+                if bugExchange.toList() not in bugExchangeData:
                     Database.insert(bugExchange)
 # Error: analyze.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget1'.
 #

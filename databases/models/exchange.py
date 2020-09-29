@@ -32,3 +32,5 @@ class Exchange():
 
     def getID(self):
         return self.id
+    def getName(self):
+        return self.exchangeName
