@@ -168,6 +168,50 @@ class Ui_boursewindoww(object):
 
         self.verticalLayout_3.addWidget(self.ADD_new)
 
+
+
+        self.edit = QPushButton(self.layoutWidget)
+        self.edit.setObjectName(u"About")
+        self.edit.setMinimumSize(QSize(80, 40))
+        self.edit.setFont(font)
+        self.edit.setStyleSheet(u"QPushButton {\n"
+                                 "    \n"
+                                 "color:white;\n"
+                                 "border-radius: 2px;\n"
+                                 "background:rgb(0, 0, 0);\n"
+                                 "/* border: 2px solid #00007f;*/\n"
+                                 "text-align:left;\n"
+                                 " min-width: 80px;\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:pressed {\n"
+                                 "    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
+                                 "                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:flat {\n"
+                                 "    border: none; /* no border for a flat push button */\n"
+                                 "}\n"
+                                 "\n"
+                                 "QPushButton:default {\n"
+                                 "    border-color: navy; /* make the default button prominent */\n"
+                                 "}\n"
+                                 "QPushButton:hover\n"
+                                 "{\n"
+                                 "border: 2px solid rgb(66, 199, 0);\n"
+                                 "    border-radius: 2px;\n"
+                                 "    background-color:  black;\n"
+                                 "    min-width: 80px;\n"
+                                 "}")
+        icon4 = QIcon()
+        icon4.addFile(u"images/Edit_icon.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.edit.setIcon(icon4)
+        self.edit.setIconSize(QSize(32, 32))
+
+        self.edit.clicked.connect(self.showModifyExchange)
+        self.verticalLayout_3.addWidget(self.edit)
+
+
         self.Remove = QPushButton(self.layoutWidget)
         self.Remove.setObjectName(u"Remove")
         self.Remove.setMinimumSize(QSize(80, 40))
@@ -209,45 +253,6 @@ class Ui_boursewindoww(object):
         self.Remove.clicked.connect(self.deleteExchangeItem)
         self.verticalLayout_3.addWidget(self.Remove)
 
-        self.About = QPushButton(self.layoutWidget)
-        self.About.setObjectName(u"About")
-        self.About.setMinimumSize(QSize(80, 40))
-        self.About.setFont(font)
-        self.About.setStyleSheet(u"QPushButton {\n"
-                                 "    \n"
-                                 "color:white;\n"
-                                 "border-radius: 2px;\n"
-                                 "background:rgb(0, 0, 0);\n"
-                                 "/* border: 2px solid #00007f;*/\n"
-                                 "text-align:left;\n"
-                                 " min-width: 80px;\n"
-                                 "}\n"
-                                 "\n"
-                                 "QPushButton:pressed {\n"
-                                 "    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,\n"
-                                 "                                      stop: 0 #dadbde, stop: 1 #f6f7fa);\n"
-                                 "}\n"
-                                 "\n"
-                                 "QPushButton:flat {\n"
-                                 "    border: none; /* no border for a flat push button */\n"
-                                 "}\n"
-                                 "\n"
-                                 "QPushButton:default {\n"
-                                 "    border-color: navy; /* make the default button prominent */\n"
-                                 "}\n"
-                                 "QPushButton:hover\n"
-                                 "{\n"
-                                 "border: 2px solid rgb(66, 199, 0);\n"
-                                 "    border-radius: 2px;\n"
-                                 "    background-color:  black;\n"
-                                 "    min-width: 80px;\n"
-                                 "}")
-        icon4 = QIcon()
-        icon4.addFile(u"images/image.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.About.setIcon(icon4)
-        self.About.setIconSize(QSize(32, 32))
-
-        self.verticalLayout_3.addWidget(self.About)
 
         self.QUIT = QPushButton(self.layoutWidget)
         self.QUIT.setObjectName(u"QUIT")
@@ -293,6 +298,8 @@ class Ui_boursewindoww(object):
         self.QUIT.setAutoRepeat(False)
         self.QUIT.setAutoDefault(False)
         self.QUIT.setFlat(False)
+
+        self.QUIT.clicked.connect(QCoreApplication.instance().quit)
         self.verticalLayout_3.addWidget(self.QUIT)
 
         self.verticalLayout_4.addLayout(self.verticalLayout_3)
@@ -767,28 +774,28 @@ class Ui_boursewindoww(object):
         self.label_5.setText("")
         # if QT_CONFIG(tooltip)
         self.Select.setToolTip(QCoreApplication.translate("boursewindoww",
-                                                          u"<html><head/><body><p><span style=\" font-size:9pt; color:#3c3c5a;\">Select a stock exchange and then clic here to display Analyze window</span></p></body></html>",
+                                                          u"<html><head/><body><p><span style=\" font-size:9pt; color:#3c3c5a;\">Select a stock exchange and then click here to display Analyze window</span></p></body></html>",
                                                           None))
         # endif // QT_CONFIG(tooltip)
         self.Select.setText(QCoreApplication.translate("boursewindoww", u"       Select", None))
         # if QT_CONFIG(tooltip)
         self.ADD_new.setToolTip(QCoreApplication.translate("boursewindoww",
-                                                           u"<html><head/><body><p><span style=\" font-size:9pt; color:#3c3c5a;\">Clic here if you want to add a new stock exchange</span></p></body></html>",
+                                                           u"<html><head/><body><p><span style=\" font-size:9pt; color:#3c3c5a;\">Click here if you want to add a new stock exchange</span></p></body></html>",
                                                            None))
         # endif // QT_CONFIG(tooltip)
         self.ADD_new.setText(QCoreApplication.translate("boursewindoww", u"       Add New / Save", None))
         # if QT_CONFIG(tooltip)
         self.Remove.setToolTip(QCoreApplication.translate("boursewindoww",
-                                                          u"<html><head/><body><p><span style=\" font-size:9pt; color:#3c3c5a;\">select a stock exchange from a list and clic here to delete it</span></p></body></html>",
+                                                          u"<html><head/><body><p><span style=\" font-size:9pt; color:#3c3c5a;\">select a stock exchange from a list and click here to delete it</span></p></body></html>",
                                                           None))
         # endif // QT_CONFIG(tooltip)
         self.Remove.setText(QCoreApplication.translate("boursewindoww", u"      Remove", None))
         # if QT_CONFIG(tooltip)
-        self.About.setToolTip(QCoreApplication.translate("boursewindoww",
-                                                         u"<html><head/><body><p><span style=\" font-family:'Helvetica Neue,Helvetica,Arial,sans-serif'; font-size:9pt; color:#3c3c5a; background-color:#ffffff;\">Click\u00a0here\u00a0to\u00a0view more\u00a0informations\u00a0about\u00a0the\u00a0list\u00a0of\u00a0stock exchanges</span></p></body></html>",
+        self.edit.setToolTip(QCoreApplication.translate("boursewindoww",
+                                                         u"<html><head/><body><p><span style=\" font-family:'Helvetica Neue,Helvetica,Arial,sans-serif'; font-size:9pt; color:#3c3c5a; background-color:#ffffff;\">Select a stock exchange and then click here to modify </span></p></body></html>",
                                                          None))
         # endif // QT_CONFIG(tooltip)
-        self.About.setText(QCoreApplication.translate("boursewindoww", u"      About ", None))
+        self.edit.setText(QCoreApplication.translate("boursewindoww", u"      Edit ", None))
         self.QUIT.setText(QCoreApplication.translate("boursewindoww", u"      Quit", None))
         self.label_6.setText("")
         self.label_4.setText(QCoreApplication.translate("boursewindoww", u" STOCK EXCHANGES LIST", None))
@@ -885,6 +892,37 @@ class Ui_boursewindoww(object):
             print(item)
             self.listbourse.addItem(exchangeToShow)
         self.label_3.setText(str(self.listbourse.count()))
+
+    @Slot()
+    def showModifyExchange(self):
+        global item
+        exchange =Exchange()
+        item =self.listbourse.currentItem()
+        for element in Database.getAll(Exchange):
+            if item.text() == element[1]:
+                exchange = Exchange(element[0] , element[1] , element[2] , element[3] , element[4] )
+
+        ui = ui_add_exchange()
+        ui.nameLineEdit.setText(exchange.getName()  )
+        ui.ipAddressLineEdit.setText(exchange.ipAddress)
+        ui.usernameLineEdit.setText(exchange.userName)
+        ui.passwordLineEdit.setText( exchange.password)
+        ui.addButton.setText("MODIFY EXCHANGE")
+        ui.show()
+        ui.exec_()
+        exchange.exchangeName =  ui.nameLineEdit.text()
+        exchange.ipAddress = ui.ipAddressLineEdit.text()
+        exchange.userName = ui.usernameLineEdit.text()
+        exchange.password = ui.passwordLineEdit.text()
+        self.IDNameMap[exchange.getID()] = exchange.getName()
+
+        self.listbourse.currentItem().setText(exchange.exchangeName)
+
+        ui.addButton.clicked.connect(Slot(Database.update(exchange)))
+
+
+
+
 
 
 

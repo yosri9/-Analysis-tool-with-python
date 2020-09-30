@@ -20,12 +20,7 @@ class Exchange():
         )
 
 
-    def exchangeFromMap(self, map):
-        self.id = map[0]
-        self.exchangeName = map[1]
-        self.ipAddress = map[2]
-        self.userName = map[3]
-        self.password = map[4]
+
     @classmethod
     def table(self):
         return 'exchanges'

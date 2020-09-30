@@ -12,7 +12,7 @@ class Database():
                                                     id integer PRIMARY KEY AUTOINCREMENT,
                                                     name text NOT NULL,
                                                     ip_address text NOT NULL,
-                                                    username text NOT NULL,
+                                                    user_name text NOT NULL,
                                                     password text NOT NULL
 
 
@@ -62,12 +62,17 @@ class Database():
         conn.close()
 
 
-    def update(self , model):
+    def update( model):
         conn = sqlite3.connect("analysis-tool.db")
         db = conn.cursor()
         # TODO: update 2 table
-        sql_update_row = "UPDATE" + model.table()  +"SET+" + model.toMap().items + "WHERE id = " + model.getID
-        db.execute( sql_update_row , model.toMap().items() )
+        sql_update_row = "UPDATE " + model.table()  +" SET name = '" + model.exchangeName + "' , ip_address = '"+ str(model.ipAddress) +"' , user_name =  '"+model.userName+ "', password = '" +model.password+  "' WHERE id = " + str(model.getID())
+        print(sql_update_row)
+        db.execute( sql_update_row  )
+
+        conn.commit()
+        db.close()
+        conn.close()
 
     def bugExchangedelete( model):
         conn = sqlite3.connect("analysis-tool.db")

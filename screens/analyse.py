@@ -625,7 +625,7 @@ class Ui_analyze(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_3 = QSpacerItem(10, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_3)
 
@@ -641,7 +641,7 @@ class Ui_analyze(object):
                                         "border-radius: 1px;\n"
                                         "background:rgb(216, 0, 0);\n"
                                         "/* border: 2px solid #00007f;*/\n"
-                                        " min-width: 4px;\n"
+                                        " min-width: 10px;\n"
                                         "}\n"
                                         "QPushButton\n"
                                         "{\n"
@@ -650,7 +650,7 @@ class Ui_analyze(object):
         icon8 = QIcon()
         icon8.addFile(u"images/arrow_down.png", QSize(), QIcon.Normal, QIcon.Off)
         self.ignoreButton.setIcon(icon8)
-        self.ignoreButton.setIconSize(QSize(32, 32))
+        self.ignoreButton.setIconSize(QSize(200, 32))
 
         self.ignoreButton.clicked.connect(self.addIgnoredItem)
 
@@ -663,7 +663,7 @@ class Ui_analyze(object):
         sizePolicy5.setVerticalStretch(0)
         sizePolicy5.setHeightForWidth(self.ignoreLabel_2.sizePolicy().hasHeightForWidth())
         self.ignoreLabel_2.setSizePolicy(sizePolicy5)
-        self.ignoreLabel_2.setMaximumSize(QSize(100, 20))
+        self.ignoreLabel_2.setMaximumSize(QSize(400, 20))
         self.ignoreLabel_2.setFont(font4)
         self.ignoreLabel_2.setStyleSheet(u"color:white;")
         self.ignoreLabel_2.setAlignment(Qt.AlignCenter)
@@ -672,32 +672,18 @@ class Ui_analyze(object):
 
         self.horizontalLayout_3.addLayout(self.verticalLayout)
 
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer_4 = QSpacerItem(60, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_4)
 
         self.verticalLayout_4 = QVBoxLayout()
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.delete_error_rep = QPushButton(self.centralwidget)
-        self.delete_error_rep.setObjectName(u"delete_error_rep")
-        self.delete_error_rep.setStyleSheet(u"QPushButton:hover\n"
-                                            "{\n"
-                                            "color:white;\n"
-                                            "border-radius: 1px;\n"
-                                            "background:rgb(72, 145, 218);\n"
-                                            "/* border: 2px solid #00007f;*/\n"
-                                            " min-width: 4px;\n"
-                                            "}\n"
-                                            "QPushButton\n"
-                                            "{\n"
-                                            "background:rgb(204, 204, 204);\n"
-                                            "}")
+
         icon9 = QIcon()
         icon9.addFile(u"images/memorize_pic.png", QSize(), QIcon.Normal, QIcon.Off)
-        self.delete_error_rep.setIcon(icon9)
-        self.delete_error_rep.setIconSize(QSize(32, 32))
 
-        self.verticalLayout_4.addWidget(self.delete_error_rep)
+
+        # self.verticalLayout_4.addWidget(self.delete_error_rep)
 
         self.memorize_label = QLabel(self.centralwidget)
         self.memorize_label.setObjectName(u"memorize_label")
@@ -708,7 +694,7 @@ class Ui_analyze(object):
 
         self.horizontalLayout_3.addLayout(self.verticalLayout_4)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Preferred, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(120, 20, QSizePolicy.Preferred, QSizePolicy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
@@ -742,7 +728,7 @@ class Ui_analyze(object):
 
         self.horizontalLayout_3.addLayout(self.verticalLayout_5)
 
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        self.horizontalSpacer_5 = QSpacerItem(220, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_5)
 
@@ -769,10 +755,13 @@ class Ui_analyze(object):
                                          "{\n"
                                          "background:rgb(204, 204, 204);\n"
                                          "}")
+
+
+        self.restoreButton.setMaximumSize(QSize(100,40))
         icon10 = QIcon()
         icon10.addFile(u"images/arrow_up.png", QSize(), QIcon.Normal, QIcon.Off)
         self.restoreButton.setIcon(icon10)
-        self.restoreButton.setIconSize(QSize(32, 32))
+        self.restoreButton.setIconSize(QSize(200, 32))
 
         self.restoreButton.clicked.connect(self.restoreBug)
         self.verticalLayout_2.addWidget(self.restoreButton)
@@ -1040,29 +1029,25 @@ class Ui_analyze(object):
                                   QCoreApplication.translate("analyze", u"TRACE", None))
         # if QT_CONFIG(tooltip)
         self.ignoreButton.setToolTip(QCoreApplication.translate("analyze",
-                                                                u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Clic here to save the selected error in the database and delete it from the log file </span></p></body></html>",
+                                                                u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Click here to save the selected error in the database and delete it from the log file </span></p></body></html>",
                                                                 None))
         # endif // QT_CONFIG(tooltip)
         self.ignoreButton.setText("")
         self.ignoreLabel_2.setText(QCoreApplication.translate("analyze", u"Ignore  ", None))
         # if QT_CONFIG(tooltip)
-        self.delete_error_rep.setToolTip(QCoreApplication.translate("analyze",
-                                                                    u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Clic here to delete repetition of the selected error</span></p></body></html>",
-                                                                    None))
-        # endif // QT_CONFIG(tooltip)
-        self.delete_error_rep.setText("")
-        self.memorize_label.setText(QCoreApplication.translate("analyze", u"Delete error repetition", None))
+
         # if QT_CONFIG(tooltip)
         self.memorize_allexchange.setToolTip(QCoreApplication.translate("analyze",
-                                                                        u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Clic here to memorize the selected error for all stock exchanges</span></p></body></html>",
+                                                                        u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Click here to memorize the selected error for all stock exchanges</span></p></body></html>",
                                                                         None))
         # endif // QT_CONFIG(tooltip)
         self.memorize_allexchange.setText("")
         self.label_7.setText(QCoreApplication.translate("analyze", u"Memorize for all exchanges", None))
         # if QT_CONFIG(tooltip)
         self.restoreButton.setToolTip(QCoreApplication.translate("analyze",
-                                                                 u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Clic here to restore the selected error from database and show it in the log file</span></p></body></html>",
+                                                                 u"<html><head/><body><p><span style=\" font-size:10pt; font-weight:600;\">Click here to restore the selected error from database and show it in the log file</span></p></body></html>",
                                                                  None))
+
         # endif // QT_CONFIG(tooltip)
         self.restoreButton.setText("")
         self.restoreLabel.setText(QCoreApplication.translate("analyze", u"Restore", None))

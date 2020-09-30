@@ -70,8 +70,9 @@ class ui_add_exchange(QDialog):
         Database.analysisToolDatabase()
         exchange = Exchange(None, self.nameLineEdit.text(), self.ipAddressLineEdit.text(),
                             self.usernameLineEdit.text(), self.passwordLineEdit.text())
+        if self.addButton.text() =="ADD EXCHANGE":
+            Database.insert(exchange)
 
-        Database.insert(exchange)
         self.close()
 
     @Slot()
