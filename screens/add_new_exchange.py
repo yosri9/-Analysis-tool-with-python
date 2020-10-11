@@ -3,7 +3,8 @@ from asyncio.windows_events import NULL
 from tkinter.tix import Form
 
 import paramiko
-from PySide2.QtCore import Slot
+from PySide2.QtCore import Slot, QSize
+from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import (QLineEdit, QPushButton, QApplication,
                                QVBoxLayout, QDialog, QLabel, QGridLayout, QListWidgetItem)
 
@@ -15,7 +16,10 @@ from databases import database, Database
 class ui_add_exchange(QDialog):
     def __init__(self, *args, **kwargs):
         super(ui_add_exchange, self).__init__(*args, **kwargs)
-
+        self.setWindowTitle("Exchange Item")
+        icon = QIcon()
+        icon.addFile(u"images/stock.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.setWindowIcon(icon)
         self.setStyleSheet("background-color: grey;")
 
         self.nameLabel = QLabel(self.tr("&Exchange Name:"))

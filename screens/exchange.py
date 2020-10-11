@@ -770,7 +770,7 @@ class Ui_boursewindoww(object):
     # setupUi
 
     def retranslateUi(self, boursewindoww):
-        boursewindoww.setWindowTitle(QCoreApplication.translate("boursewindoww", u"MainWindow", None))
+        boursewindoww.setWindowTitle(QCoreApplication.translate("boursewindoww", u"Stock Exchange", None))
         self.label_5.setText("")
         # if QT_CONFIG(tooltip)
         self.Select.setToolTip(QCoreApplication.translate("boursewindoww",

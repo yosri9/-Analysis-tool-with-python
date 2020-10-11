@@ -682,7 +682,6 @@ class Ui_analyze(object):
         icon9 = QIcon()
         icon9.addFile(u"images/memorize_pic.png", QSize(), QIcon.Normal, QIcon.Off)
 
-
         # self.verticalLayout_4.addWidget(self.delete_error_rep)
 
         self.memorize_label = QLabel(self.centralwidget)
@@ -756,8 +755,7 @@ class Ui_analyze(object):
                                          "background:rgb(204, 204, 204);\n"
                                          "}")
 
-
-        self.restoreButton.setMaximumSize(QSize(100,40))
+        self.restoreButton.setMaximumSize(QSize(100, 40))
         icon10 = QIcon()
         icon10.addFile(u"images/arrow_up.png", QSize(), QIcon.Normal, QIcon.Off)
         self.restoreButton.setIcon(icon10)
@@ -957,7 +955,7 @@ class Ui_analyze(object):
         icon11.addFile(u"images/turn_off_on_power.png", QSize(), QIcon.Normal, QIcon.Off)
         self.quit_button.setIcon(icon11)
         self.quit_button.setIconSize(QSize(32, 32))
-
+        self.quit_button.clicked.connect(QCoreApplication.instance().quit)
         self.gridLayout_5.addWidget(self.quit_button, 0, 5, 1, 1)
 
         self.verticalLayout_3.addWidget(self.frame_3)
@@ -1076,11 +1074,15 @@ class Ui_analyze(object):
                 line = line[1::]
 
             line = line.split(" ", 2)
+            item3 = line[2]
+            item3 = item3[:-2]
+            print(item3)
+            line[2] = item3
+            print(line)
+
             # print(self.bugData)
 
-            print(line)
             if line not in self.bugData:
-                print(line)
 
                 bug = QTreeWidgetItem(line)
                 bugPage.addTopLevelItem(bug)
@@ -1158,6 +1160,7 @@ class Ui_analyze(object):
                     self.unwanted_log_info.addTopLevelItem(item)
         except Exception:
             print(Exception)
+
     def addIgnoredPageItem(self, bugPage):
         global selectedBug, selectedBug, itemIndex, selectedBugItem
         selectedBugItem = None
